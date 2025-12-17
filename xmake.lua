@@ -1,8 +1,28 @@
+set_project("bankmgr")
+set_version("1.0.0", {build = "%Y%m%d%H%M"})
+set_license("MIT")
+
 add_rules("mode.debug", "mode.release")
+set_toolchains("mingw")
+set_languages("c++17")
 
 target("bankmgr")
     set_kind("binary")
     add_files("src/*.cpp")
+    add_files("src/main.cpp")
+    add_includedirs(".")
+
+-- xmake run bankmgr
+
+-- 每个同学的独立测试程序
+target("test-list")
+    set_kind("binary")
+    add_files("tests/test-list.cpp")
+    add_files("src/*.cpp")
+    add_includedirs("src")
+    remove_files("src/main.cpp")
+
+-- xmake run test-list
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
