@@ -54,4 +54,4 @@ xmake f -p mingw --sdk=C:\msys64\ucrt64 -c
 ```powershell
 xmake run test-list
 
-## from wzs
+## from wzs2
