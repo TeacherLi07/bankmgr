@@ -20,9 +20,6 @@ pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb mingw-w64-ucrt-x86
 
 1.  按 `Win + S` 搜索 "查看高级系统设置"。
 2.  点击 "环境变量" -> 在 "系统变量" 区域找到 `Path` -> 点击 "编辑"。
-3.  点击 "新建"，添加路径：`C:\msys64\ucrt64\bin`
-4.  点击确定保存。
-5.  **重启 VS Code** 以加载新的环境变量。
 
 ## 4. 安装 xmake
 
