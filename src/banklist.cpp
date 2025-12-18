@@ -93,7 +93,7 @@ int operator-(Date d1, Date d2)
         return 0;
     if (d1 < d2)
     {
-        std::swap(d1, d2);
+        swap(d1, d2);
         sign = -1;
     }
     while (d1 != d2)
@@ -103,3 +103,64 @@ int operator-(Date d1, Date d2)
     }
     return d * sign;
 }
+
+BankListNode *createList()
+{
+    auto *head = new BankListNode;
+    head->next = nullptr;
+    return head;
+}
+
+void destroyList(BankListNode *head)
+{
+    auto *current = head;
+    while (current != nullptr)
+    {
+        auto *tmp = current;
+        current = current->next;
+        delete tmp;
+    }
+}
+
+bool isEmpty(BankListNode *head)
+{
+    return head->next == nullptr;
+}
+
+BankListNode *appendAccount(BankListNode *head, const Account &account)
+{
+    auto *newNode = new BankListNode;
+    newNode->account = account;
+    newNode->next = nullptr;
+
+    auto *tail = head;
+    while (tail->next != nullptr)
+    {
+        tail = tail->next;
+    }
+    tail->next = newNode;
+    return newNode;
+}
+
+void deleteAccount(BankListNode *head, BankListNode *node)
+{
+    auto *prev = head;
+    while (prev->next != nullptr)
+    {
+        if (prev->next == node)
+        {
+            auto *tmp = prev->next;
+            prev->next = tmp->next;
+            delete tmp;
+            return;
+        }
+        prev = prev->next;
+    }
+}
+
+void editAccount(BankListNode *node, const Account &newAccountData)
+{
+    if (node != nullptr)
+        node->account = newAccountData;
+}
+

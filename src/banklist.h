@@ -4,6 +4,9 @@
 #include <string>
 using std::string;
 
+#include <utility>
+using std::swap;
+
 /**
  * @brief 日期结构体
  * ++ == != < > - 运算符均支持
@@ -78,12 +81,11 @@ BankListNode *appendAccount(BankListNode *head, const Account &account);
 // 删
 
 /**
- * @brief 删除指定账号的账户
+ * @brief 删除指定账户
  * @param head 链表头节点指针
- * @param accountID 账号
- * @return true表示账号存在且删除成功，false表示账号不存在
+ * @param node 要删除的节点指针
  */
-bool deleteAccount(BankListNode *head, const string &accountID);
+void deleteAccount(BankListNode *head, BankListNode *node);
 
 // 改
 
@@ -93,16 +95,6 @@ bool deleteAccount(BankListNode *head, const string &accountID);
  * @param newAccountData 新的账户信息
  */
 void editAccount(BankListNode *node, const Account &newAccountData);
-
-// 查
-
-/**
- * @brief 根据账号查找账户
- * @param head 链表头节点指针
- * @param accountID 账号
- * @return 找到返回该节点指针，未找到返回nullptr
- */
-BankListNode *findByAccountID(BankListNode *head, const string &accountID);
 
 // 文件
 
