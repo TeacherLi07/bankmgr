@@ -5,6 +5,7 @@ set_license("MIT")
 add_rules("mode.debug", "mode.release")
 set_toolchains("mingw")
 set_languages("c++17")
+set_warnings("all")
 
 target("bankmgr")
     set_kind("binary")
@@ -15,14 +16,45 @@ target("bankmgr")
 -- xmake run bankmgr
 
 -- 每个同学的独立测试程序
-target("test-list")
+target("test-lxh")
     set_kind("binary")
-    add_files("tests/test-list.cpp")
+    add_files("tests/test-lxh.cpp")
     add_files("src/*.cpp")
     add_includedirs("src")
     remove_files("src/main.cpp")
+-- xmake run test-lxh
 
--- xmake run test-list
+target("test-wzs")
+    set_kind("binary")
+    add_files("tests/test-wzs.cpp")
+    add_files("src/*.cpp")
+    add_includedirs("src")
+    remove_files("src/main.cpp")
+-- xmake run test-wzs
+
+target("test-wj")
+    set_kind("binary")
+    add_files("tests/test-wj.cpp")
+    add_files("src/*.cpp")
+    add_includedirs("src")
+    remove_files("src/main.cpp")
+-- xmake run test-wj
+
+target("test-wmk")
+    set_kind("binary")
+    add_files("tests/test-wmk.cpp")
+    add_files("src/*.cpp")
+    add_includedirs("src")
+    remove_files("src/main.cpp")
+-- xmake run test-wmk
+
+target("test-lzy")
+    set_kind("binary")
+    add_files("tests/test-lzy.cpp")
+    add_files("src/*.cpp")
+    add_includedirs("src")
+    remove_files("src/main.cpp")
+-- xmake run test-lzy
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
