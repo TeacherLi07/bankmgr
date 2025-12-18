@@ -3,6 +3,6 @@ using std::cin, std::cout, std::endl;
 
 int main()
 {
-    cout<<"Hello, this is wj's test file."<<endl;
+    cout<<"\nHello, this is wj's test file.\n"<<endl;
     return 0;
 }
