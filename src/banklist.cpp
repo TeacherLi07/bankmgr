@@ -34,7 +34,6 @@ Date operator++(Date &d)
     const int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     const bool isr = (d.year % 4 == 0 && d.year % 100 != 0) || (d.year % 400 == 0);
 
-    // 修改 d 本身
     d.day++;
     if (d.month == 2)
     {
@@ -54,7 +53,7 @@ Date operator++(Date &d)
             d.year++;
         }
     }
-    return d; // 返回修改前的值
+    return d; 
 }
 
 bool operator==(const Date &d1, const Date &d2)
@@ -87,7 +86,6 @@ bool operator>(const Date &d1, const Date &d2)
 
 int operator-(Date d1, Date d2)
 {
-    const int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int d = 0, sign = 1;
     if (d1 == d2)
         return 0;

@@ -1,6 +1,3 @@
-#ifndef BANKLIST_H
-#define BANKLIST_H
-
 #include <string>
 using std::string;
 
@@ -114,4 +111,3 @@ bool loadFromFile(BankListNode *head, const string &filepath);
  */
 bool saveToFile(BankListNode *head, const string &filepath);
 
-#endif // BANKLIST_H
