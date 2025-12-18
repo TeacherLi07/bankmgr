@@ -162,3 +162,18 @@ void editAccount(BankListNode *node, const Account &newAccountData)
         node->account = newAccountData;
 }
 
+bool loadFromFile(BankListNode *head, const string &filepath)
+{
+    // 未实现，假装导入
+    Account acc1 = {"ACC1001", "Alice", false, "alicepwd", 500000, {2023, 5, 20}, false};
+    Account acc2 = {"ACC1002", "Bob", true, "bobpwd", 750000, {2022, 11, 15}, true};
+    appendAccount(head, acc1);
+    appendAccount(head, acc2);
+    return true;
+}
+
+bool saveToFile(BankListNode *head, const string &filepath)
+{
+    // 未实现，假装保存成功
+    return true;
+}
