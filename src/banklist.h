@@ -4,26 +4,27 @@
 #include <string>
 using std::string;
 
-struct Date {
+/**
+ * @brief 日期结构体
+ * ++ == != < > - 运算符均支持
+ */
+struct Date
+{
     int year;
     int month;
     int day;
-
 };
 
-/**
- * @brief 日期后继
- */
-Date operator++(Date& d, int);
-Date operator++(Date& d);
+Date operator++(Date &d, int);
+Date operator++(Date &d);
+bool operator==(const Date &d1, const Date &d2);
+bool operator!=(const Date &d1, const Date &d2);
+bool operator<(const Date &d1, const Date &d2);
+bool operator>(const Date &d1, const Date &d2);
+int operator-(Date d1, Date d2);
 
-/**
- * @brief 日期相减
- */
-int operator-(const Date& d1, const Date& d2);
-
-
-struct Account {
+struct Account
+{
     string accountID;
     string ownerName;
     bool gender; // true男性，false女性
@@ -33,11 +34,11 @@ struct Account {
     bool isFixed; // true定期，false活期
 };
 
-struct BankListNode {
+struct BankListNode
+{
     Account account;
-    BankListNode* next;
+    BankListNode *next;
 };
-
 
 // 建
 
@@ -45,7 +46,7 @@ struct BankListNode {
  * @brief 创建新链表
  * @return 返回头节点指针
  */
-BankListNode* createList();
+BankListNode *createList();
 
 // 清
 
@@ -53,7 +54,7 @@ BankListNode* createList();
  * @brief 删除链表，释放空间
  * @param head 链表头节点指针
  */
-void destroyList(BankListNode* head);
+void destroyList(BankListNode *head);
 
 // 判空
 
@@ -62,7 +63,7 @@ void destroyList(BankListNode* head);
  * @param head 链表头节点指针
  * @return true表示空，false表示非空
  */
-bool isEmpty(BankListNode* head);
+bool isEmpty(BankListNode *head);
 
 // 增
 
@@ -72,7 +73,7 @@ bool isEmpty(BankListNode* head);
  * @param account 要插入的账户信息
  * @return 新节点指针
  */
-BankListNode* appendAccount(BankListNode* head, const Account& account);
+BankListNode *appendAccount(BankListNode *head, const Account &account);
 
 // 删
 
@@ -82,7 +83,7 @@ BankListNode* appendAccount(BankListNode* head, const Account& account);
  * @param accountID 账号
  * @return true表示账号存在且删除成功，false表示账号不存在
  */
-bool deleteAccount(BankListNode* head, const string& accountID);
+bool deleteAccount(BankListNode *head, const string &accountID);
 
 // 改
 
@@ -91,7 +92,7 @@ bool deleteAccount(BankListNode* head, const string& accountID);
  * @param node 要编辑的节点指针
  * @param newAccountData 新的账户信息
  */
-void editAccount(BankListNode* node, const Account& newAccountData);
+void editAccount(BankListNode *node, const Account &newAccountData);
 
 // 查
 
@@ -101,7 +102,7 @@ void editAccount(BankListNode* node, const Account& newAccountData);
  * @param accountID 账号
  * @return 找到返回该节点指针，未找到返回nullptr
  */
-BankListNode* findByAccountID(BankListNode* head, const string& accountID);
+BankListNode *findByAccountID(BankListNode *head, const string &accountID);
 
 // 文件
 
@@ -111,7 +112,7 @@ BankListNode* findByAccountID(BankListNode* head, const string& accountID);
  * @param filename 文件相对路径
  * @return true表示加载成功，false表示失败
  */
-bool loadFromFile(BankListNode* head, const string& filepath);
+bool loadFromFile(BankListNode *head, const string &filepath);
 
 /**
  * @brief 将链表中的账户信息保存到文件
@@ -119,6 +120,6 @@ bool loadFromFile(BankListNode* head, const string& filepath);
  * @param filename 文件相对路径
  * @return true表示保存成功，false表示失败
  */
-bool saveToFile(BankListNode* head, const string& filepath);
+bool saveToFile(BankListNode *head, const string &filepath);
 
 #endif // BANKLIST_H
