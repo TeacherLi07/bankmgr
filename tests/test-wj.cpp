@@ -59,18 +59,24 @@ int main()
         {"ACC1006", "Eva",    false, "pwd10", 600000, {2021, 4, 25}, true }
     };
 
-    // 2. 用这 10 个数据创建一条链表（不带头结点）
-    BankListNode *head = nullptr;
+    // 2. 用这 10 个数据创建一条链表（带头结点）
+    BankListNode *head = new BankListNode; // 头结点，不存放有效账户数据
+    head->next = nullptr;
+
+    BankListNode *dataHead = nullptr;  // 实际数据链表的首节点
     BankListNode *tail = nullptr;
     for (const auto &acc : testAccounts)
     {
-        pushBack(head, tail, acc);
+        // 先构建不带头结点的数据链表
+        pushBack(dataHead, tail, acc);
     }
+    // 再把数据链表挂到头结点后面
+    head->next = dataHead;
 
-    cout << "===== 原始 =====" << endl;
-    printList(head);
+    cout << "===== 原始（带头结点，以下从 head->next 开始打印） =====" << endl;
+    printList(head->next);
 
-    // 3. 按姓名排序测试
+    // 3. 按姓名排序测试（SortByXXX 期望传入带头结点的 head）
     BankListNode *sortedByName = SortByName(head);
     cout << "\n===== 姓名 =====" << endl;
     printList(sortedByName);
