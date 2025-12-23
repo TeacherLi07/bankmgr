@@ -2,11 +2,15 @@
 #include <iostream>
 using std::cin;
 using std::string;
-
+//传入带头结点的链表
 BankListNode* find_accountID(BankListNode* head, string accountID_0)
 {
-    BankListNode* p=head;
-    while(p->next!=NULL)//检查！
+    if(head->next==NULL)
+    {
+        return NULL;
+    }
+    BankListNode* p=head->next;
+    while(p!=NULL)//检查！
     {
         if(p->account.accountID==accountID_0)
         {

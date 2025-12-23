@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include "deposit&withdraw.h"
-
 using std::cin;
 using std::cout;
 using std::endl;
