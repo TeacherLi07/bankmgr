@@ -10,9 +10,9 @@ using std::swap;
  */
 struct Date
 {
-    int year;
-    int month;
-    int day;
+    int year = 1970;
+    int month = 1;
+    int day = 1;
 };
 
 Date operator++(Date &d, int);
@@ -25,19 +25,19 @@ int operator-(Date d1, Date d2);
 
 struct Account
 {
-    string accountID;
-    string ownerName;
-    bool gender; // true男性，false女性
-    string password;
-    long long balance; // 以分为单位
+    string accountID = "";
+    string ownerName = "";
+    bool gender = true; // true男性，false女性
+    string password = "";
+    long long balance = 0; // 以分为单位
     Date creationDate;
-    bool isFixed; // true定期，false活期
+    bool isFixed = false; // true定期，false活期
 };
 
 struct BankListNode
 {
     Account account;
-    BankListNode *next;
+    BankListNode *next = nullptr;
 };
 
 // 建
