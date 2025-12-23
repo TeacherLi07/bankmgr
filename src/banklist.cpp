@@ -105,6 +105,7 @@ int operator-(Date d1, Date d2)
 BankListNode *createList()
 {
     auto *head = new BankListNode;
+    head->account = Account{};
     head->next = nullptr;
     return head;
 }
