@@ -1,3 +1,5 @@
+#pragma once
+
 #include "banklist.h"
 BankListNode* find_accountID(BankListNode* head, string accountID_0);
 bool password_correct(BankListNode* p_node,string password_0);
