@@ -1,3 +1,5 @@
+#pragma once
+
 #include "banklist.h"
 
 void openAccount(BankListNode* head);

@@ -1,4 +1,10 @@
+#pragma once
 #include"banklist.h"
 
-
-long long interest(struct Account p,struct Date day1);//输入用户p，存款到期日day1,返回获得的利息（两位小数）
+/**
+ * @brief 计算利息函数
+ * @param p 账户信息
+ * @param day1 存款到期日期
+ * @return 计算得到的利息（以分为单位）
+ */
+long long interest(struct Account p,struct Date day1);

@@ -1,4 +1,3 @@
-#pragma.once
 #include "open.h"
 #include <iostream>
 using std::cin,std::cout,std::endl;
@@ -10,7 +9,7 @@ void openAccount(BankListNode* head) {
     cin >> newaccount.accountID;
     //检验是否存在账户
     BankListNode* p = head->next;
-    while (p != NULL) {
+    while (p != nullptr) {
         if (p->account.accountID == newaccount.accountID) {
             cout << "错误：该账号已存在！开户失败。" << endl;
             return;
@@ -66,7 +65,7 @@ void cancelaccount(BankListNode* head) {
     cout << "请输入账户密码：";
     cin >> inputpassword;
     BankListNode* p = head->next;
-    while (p != NULL) {
+    while (p != nullptr) {
         if (p->account.accountID == inputaccountID) {
             if (p->account.password == inputpassword) {
                 p->account.balance = 0;
@@ -104,7 +103,7 @@ void queryAccount(BankListNode* head, int choice, const string& targetID,
     bool found = false;
     switch (choice) {
     case 1:
-        while (p != NULL) {
+        while (p != nullptr) {
             if (p->account.accountID == targetID) {
                 printAccount(p->account);
                 found = true;
@@ -113,7 +112,7 @@ void queryAccount(BankListNode* head, int choice, const string& targetID,
         }
         break;
     case 2:
-        while (p != NULL) {
+        while (p != nullptr) {
             if (p->account.ownerName == targetName) {
                 printAccount(p->account);
                 found = true;
@@ -122,7 +121,7 @@ void queryAccount(BankListNode* head, int choice, const string& targetID,
         }
         break;
     case 3:
-        while (p != NULL) {
+        while (p != nullptr) {
             if (p->account.creationDate == targetDate) {
                 printAccount(p->account);
                 found = true;
