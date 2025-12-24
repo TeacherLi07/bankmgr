@@ -6,6 +6,10 @@ using std::string;
 #include <utility>
 using std::swap;
 
+#include<fstream>
+using std::ifstream;
+using std::ofstream;
+
 /**
  * @brief 日期结构体
  * ++ == != < > - 运算符均支持
