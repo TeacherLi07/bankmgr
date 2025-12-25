@@ -10,6 +10,11 @@ using std::swap;
 using std::ifstream;
 using std::ofstream;
 
+#include <sstream>
+#include <iomanip>
+using std::stringstream;
+
+
 /**
  * @brief 日期结构体
  * ++ == != < > - 运算符均支持
@@ -29,6 +34,8 @@ bool operator<(const Date &d1, const Date &d2);
 bool operator>(const Date &d1, const Date &d2);
 int operator-(Date d1, Date d2);
 
+bool isValid(const Date &d);
+
 struct Account
 {
     string accountID = "";
@@ -39,6 +46,8 @@ struct Account
     Date creationDate;
     bool isFixed = false; // true定期，false活期
 };
+
+bool operator==(const Account &a1, const Account &a2);
 
 struct BankListNode
 {
@@ -102,10 +111,24 @@ void editAccount(BankListNode *node, const Account &newAccountData);
 // 文件
 
 /**
+ * @brief 将账户信息转换为字符串格式，便于保存到文件
+ * @param account 账户信息
+ * @return 返回格式化后的字符串
+ */
+string accountToString(const Account &account);
+
+/**
+ * @brief 将字符串转换为账户信息
+ * @param str 格式化后的字符串
+ * @return 返回账户信息，若字符串格式错误则返回空账户(Account{})
+ */
+Account stringToAccount(const string &str);
+
+/**
  * @brief 从文件加载账户信息到链表
  * @param head 链表头节点指针
  * @param filename 文件相对路径
- * @return true表示加载成功，false表示失败
+ * @return true表示全部加载成功，false表示有账户加载失败
  */
 bool loadFromFile(BankListNode *head, const string &filepath);
 

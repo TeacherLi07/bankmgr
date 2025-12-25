@@ -102,6 +102,29 @@ int operator-(Date d1, Date d2)
     return d * sign;
 }
 
+bool operator==(const Account &a1, const Account &a2)
+{
+    return (a1.accountID == a2.accountID) &&
+           (a1.ownerName == a2.ownerName) &&
+           (a1.gender == a2.gender) &&
+           (a1.password == a2.password) &&
+           (a1.balance == a2.balance) &&
+           (a1.creationDate == a2.creationDate) &&
+           (a1.isFixed == a2.isFixed);
+}
+
+bool isValid(const Date &d)
+{
+    if (d.year < 1900 || d.month < 1 || d.month > 12 || d.day < 1)
+        return false;
+    const int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    bool isr = (d.year % 4 == 0 && d.year % 100 != 0) || (d.year % 400 == 0);
+    int dim = daysInMonth[d.month];
+    if (d.month == 2 && isr)
+        dim++; // 闰年2月多一天
+    return d.day <= dim;
+}
+
 BankListNode *createList()
 {
     auto *head = new BankListNode;
@@ -163,18 +186,117 @@ void editAccount(BankListNode *node, const Account &newAccountData)
         node->account = newAccountData;
 }
 
+string accountToString(const Account &account)
+{
+    string str;
+    str += account.accountID + " ";
+    str += account.ownerName + " ";
+    str += (account.gender ? "男" : "女") + string(" ");
+    str += account.password + " ";
+    stringstream ss;
+    ss<<std::fixed<<std::setprecision(2)<<account.balance / 100.0;
+    str += ss.str() + " ";
+    ss.str("");
+    ss<<account.creationDate.year<<std::setw(2)<<std::setfill('0')<<account.creationDate.month<<std::setw(2)<<std::setfill('0')<<account.creationDate.day;
+    str += ss.str() + " ";
+    str += (account.isFixed ? "定期" : "活期");
+    return str;
+}
+
+Account stringToAccount(const string &str)
+{
+    stringstream ss(str);
+    string buf[7];
+    for(int i=0;i<7;i++)
+    {
+        if (!(ss >> buf[i])) return Account{};
+    }
+    string extra;
+    if (ss >> extra) return Account{}; 
+
+    Account acc;
+    acc.accountID = buf[0];
+    acc.ownerName = buf[1];
+
+    if(buf[2] == "男")
+        acc.gender = true;
+    else if(buf[2] == "女")
+        acc.gender = false;
+    else
+        return Account{};
+        
+    acc.password = buf[3];
+    
+    string bStr = buf[4];
+    if (bStr.length() < 4 || bStr[bStr.length() - 3] != '.') return Account{};
+    bStr.erase(bStr.length() - 3, 1); // 移除小数点
+    try {
+        acc.balance = std::stoll(bStr); // 直接转为以分为单位的整数
+    } catch (...) {
+        return Account{};
+    }
+
+    if (buf[5].length() != 8) return Account{};
+    try {
+        acc.creationDate.year = std::stoi(buf[5].substr(0, 4));
+        acc.creationDate.month = std::stoi(buf[5].substr(4, 2));
+        acc.creationDate.day = std::stoi(buf[5].substr(6, 2));
+    } catch (...) {
+        return Account{};
+    }
+    if (!isValid(acc.creationDate))
+        return Account{};
+
+    if (buf[6] == "定期")
+        acc.isFixed = true;
+    else if (buf[6] == "活期")
+        acc.isFixed = false;
+    else return
+        Account{};
+
+    return acc;
+}
+
 bool loadFromFile(BankListNode *head, const string &filepath)
 {
+    bool status = true;
     ifstream infile(filepath);
     if (!infile.is_open())
         return false;
     auto *current = head;
     string line;
-    return true;
+    while (std::getline(infile, line))
+    {
+        auto account = stringToAccount(line);
+        if(account == Account{})
+        {
+            status = false; 
+            continue;
+        }
+        auto *newNode = new BankListNode;
+        newNode->account = account;
+        newNode->next = nullptr;
+        current->next = newNode;
+        current = newNode;
+    }
+    return status;
 }
 
 bool saveToFile(BankListNode *head, const string &filepath)
 {
-    // 未实现，假装保存成功
+    ofstream outfile(filepath);
+    if (!outfile.is_open())
+        return false;
+    auto *current = head->next; 
+    while (current != nullptr)
+    {
+        if(current->account == Account{}) 
+        {
+            current = current->next;
+            continue; 
+        }
+        outfile << accountToString(current->account) << std::endl;
+        current = current->next;
+    }
     return true;
 }
