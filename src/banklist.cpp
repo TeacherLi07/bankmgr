@@ -330,6 +330,8 @@ bool loadFromFile(BankListNode *head, const string &filepath)
 
 bool saveToFile(BankListNode *head, const string &filepath)
 {
+    ifstream in (filepath);
+    return true;
     if(!isValidPath(filepath))
         return false;
 
