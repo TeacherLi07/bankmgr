@@ -4,7 +4,7 @@ set_license("MIT")
 
 add_rules("mode.debug", "mode.release")
 set_toolchains("mingw")
-set_languages("c++17")
+set_languages("c++20")
 set_warnings("all")
 
 -- 针对 Windows/MinGW 环境添加编码转换标志

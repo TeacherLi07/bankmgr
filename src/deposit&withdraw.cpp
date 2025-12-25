@@ -5,12 +5,12 @@ using std::string;
 //传入带头结点的链表
 BankListNode* find_accountID(BankListNode* head, string accountID_0)
 {
-    if(head->next==NULL)
+    if(head->next==nullptr)
     {
-        return NULL;
+        return nullptr;
     }
     BankListNode* p=head->next;
-    while(p!=NULL)//检查！
+    while(p!=nullptr)//检查！
     {
         if(p->account.accountID==accountID_0)
         {
@@ -18,7 +18,7 @@ BankListNode* find_accountID(BankListNode* head, string accountID_0)
         }
         p=p->next;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool password_correct(BankListNode* p_node,string password_0)

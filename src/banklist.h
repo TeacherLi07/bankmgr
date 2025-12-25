@@ -1,8 +1,25 @@
+#pragma once
+
 #include <string>
 using std::string;
 
 #include <utility>
 using std::swap;
+
+#include<fstream>
+#include <filesystem>
+using std::ifstream;
+using std::ofstream;
+namespace fs = std::filesystem;
+
+#include <sstream>
+#include <iomanip>
+using std::stringstream;
+#include <format>
+
+
+
+
 
 /**
  * @brief 日期结构体
@@ -23,6 +40,8 @@ bool operator<(const Date &d1, const Date &d2);
 bool operator>(const Date &d1, const Date &d2);
 int operator-(Date d1, Date d2);
 
+bool isValid(const Date &d);
+
 struct Account
 {
     string accountID = "";
@@ -33,6 +52,8 @@ struct Account
     Date creationDate;
     bool isFixed = false; // true定期，false活期
 };
+
+bool operator==(const Account &a1, const Account &a2);
 
 struct BankListNode
 {
@@ -96,10 +117,31 @@ void editAccount(BankListNode *node, const Account &newAccountData);
 // 文件
 
 /**
+ * @brief 将账户信息转换为字符串格式，便于保存到文件
+ * @param account 账户信息
+ * @return 返回格式化后的字符串
+ */
+string accountToString(const Account &account);
+
+/**
+ * @brief 将字符串转换为账户信息
+ * @param str 格式化后的字符串
+ * @return 返回账户信息，若字符串格式错误则返回空账户(Account{})
+ */
+Account stringToAccount(const string &str);
+
+/**
+ * @brief 校验文件路径是否合法，可以是绝对或相对路径
+ * @param filepath 文件路径字符串
+ * @return true表示合法，false表示不合法
+ */
+bool isValidFilepath(const string &filepath);
+
+/**
  * @brief 从文件加载账户信息到链表
  * @param head 链表头节点指针
  * @param filename 文件相对路径
- * @return true表示加载成功，false表示失败
+ * @return true表示全部加载成功，false表示有账户加载失败
  */
 bool loadFromFile(BankListNode *head, const string &filepath);
 
@@ -107,7 +149,7 @@ bool loadFromFile(BankListNode *head, const string &filepath);
  * @brief 将链表中的账户信息保存到文件
  * @param head 链表头节点指针
  * @param filename 文件相对路径
- * @return true表示保存成功，false表示失败
+ * @return true表示全部保存成功，false表示保存失败或有账户为空
  */
 bool saveToFile(BankListNode *head, const string &filepath);
 
