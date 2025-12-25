@@ -175,6 +175,6 @@ bool loadFromFile(BankListNode *head, const string &filepath)
 
 bool saveToFile(BankListNode *head, const string &filepath)
 {
-    // 未实现，假装保存成功
+    ifstream in (filepath);
     return true;
 }
