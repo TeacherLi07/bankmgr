@@ -1,7 +1,7 @@
 #include<iostream>
 #include<set>
 #include"banklist.h"
-using std::cin,std::cout,std::endl,std::set;
+using std::cin,std::cout,std::endl,std::multiset;
 BankListNode* SortByName(BankListNode *head);
 
 /**
@@ -25,6 +25,7 @@ BankListNode* SortByAccount(BankListNode *head);
 
 struct NameCmp{
     bool operator()(const Account &a, const Account &b) const{
+        if (a.ownerName==b.ownerName)return a.accountID<b.accountID;
         return a.ownerName < b.ownerName;
     }
 };
@@ -35,6 +36,7 @@ struct NameCmp{
 
 struct MoneyCmp{
     bool operator()(const Account &a, const Account &b) const{
+        if (a.balance==b.balance)return a.accountID<b.accountID;
         return a.balance > b.balance;
     }
 };

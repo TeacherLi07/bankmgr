@@ -2,87 +2,51 @@
 BankListNode* SortByName(BankListNode *head)
 {
     if (head->next==nullptr)return nullptr;//如果是空，直接返回
-    set<Account,NameCmp>ByName;
+    multiset<Account,NameCmp>ByName;
     for (BankListNode *p =head->next;p!=nullptr;p = p->next)
     {
-        ByName.insert(p->account);//把原链表的account通过set排序
+        ByName.insert(p->account);//把原链表的account通过multiset排序
     }
-    BankListNode *dataHead= nullptr;
-    BankListNode *tail =nullptr;
+    BankListNode *p =head->next;
     for (const auto &it :ByName)
     {
-        BankListNode *node = new BankListNode;
-        node->account = it;
-        node->next =nullptr;
-        if (dataHead == nullptr){
-            dataHead=node;
-            tail=node;
-        }
-        else{
-            tail->next=node;
-            tail=node;
-        }
+        p->account=it;
+        p=p->next;
     }
-    BankListNode *newHead =new BankListNode;
-    newHead->next=dataHead;
-    return newHead;
+    return head;
 }
 //姓名排序实现函数
 BankListNode* SortByMoney(BankListNode *head)
 {
     if (head->next==nullptr)return nullptr;//如果是空，直接返回
-    set<Account,MoneyCmp>ByMoney;
+    multiset<Account,MoneyCmp>ByMoney;
     for (BankListNode *p =head->next;p!=nullptr;p = p->next)
     {
-        ByMoney.insert(p->account);//把原链表的account通过set排序
+        ByMoney.insert(p->account);//把原链表的account通过multiset排序
     }
-    BankListNode *dataHead= nullptr;
-    BankListNode *tail =nullptr;
+    BankListNode *p =head->next;
     for (const auto &it :ByMoney)
     {
-        BankListNode *node = new BankListNode;
-        node->account = it;
-        node->next =nullptr;
-        if (dataHead == nullptr){
-            dataHead=node;
-            tail=node;
-        }
-        else{
-            tail->next=node;
-            tail=node;
-        }
+        p->account=it;
+        p=p->next;
     }
-    BankListNode *newHead =new BankListNode;
-    newHead->next=dataHead;
-    return newHead;
+    return head;
 }
 //金额排序实现函数
 BankListNode* SortByAccount(BankListNode *head)
 {
     if (head->next==nullptr)return nullptr;//如果是空，直接返回
-    set<Account,AccountCmp>ByAccount;
+    multiset<Account,AccountCmp>ByAccount;
     for (BankListNode *p =head->next;p!=nullptr;p = p->next)
     {
-        ByAccount.insert(p->account);//把原链表的account通过set排序
+        ByAccount.insert(p->account);//把原链表的account通过multiset排序
     }
-    BankListNode *dataHead= nullptr;
-    BankListNode *tail =nullptr;
+    BankListNode *p =head->next;
     for (const auto &it :ByAccount)
     {
-        BankListNode *node = new BankListNode;
-        node->account = it;
-        node->next =nullptr;
-        if (dataHead == nullptr){
-            dataHead=node;
-            tail=node;
-        }
-        else{
-            tail->next=node;
-            tail=node;
-        }
+        p->account=it;
+        p=p->next;
     }
-    BankListNode *newHead =new BankListNode;
-    newHead->next=dataHead;
-    return newHead;
+    return head;
 }
 //账号排序实现函数
