@@ -7,8 +7,10 @@ using std::string;
 using std::swap;
 
 #include<fstream>
+#include <filesystem>
 using std::ifstream;
 using std::ofstream;
+namespace fs = std::filesystem;
 
 #include <sstream>
 #include <iomanip>
@@ -125,6 +127,13 @@ string accountToString(const Account &account);
 Account stringToAccount(const string &str);
 
 /**
+ * @brief 校验文件路径是否合法，可以是绝对或相对路径
+ * @param filepath 文件路径字符串
+ * @return true表示合法，false表示不合法
+ */
+bool isValidFilepath(const string &filepath);
+
+/**
  * @brief 从文件加载账户信息到链表
  * @param head 链表头节点指针
  * @param filename 文件相对路径
@@ -136,7 +145,7 @@ bool loadFromFile(BankListNode *head, const string &filepath);
  * @brief 将链表中的账户信息保存到文件
  * @param head 链表头节点指针
  * @param filename 文件相对路径
- * @return true表示保存成功，false表示失败
+ * @return true表示全部保存成功，false表示保存失败或有账户为空
  */
 bool saveToFile(BankListNode *head, const string &filepath);
 

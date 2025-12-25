@@ -257,12 +257,37 @@ Account stringToAccount(const string &str)
     return acc;
 }
 
+bool isValidPath(const string &filepath)
+{
+    if (filepath.empty()) return false;
+
+    // Windows 非法字符校验 (除盘符 : 和路径分隔符 \ / 外)
+    const string invalidChars = "*?\"<>|";
+    if (filepath.find_first_of(invalidChars) != string::npos) return false;
+
+    try {
+        fs::path p(filepath);
+        // 确保路径包含文件名，而不仅仅是目录或盘符
+        if (!p.has_filename()) return false;
+        
+        if (p.has_parent_path() && !fs::exists(p.parent_path())) return false;
+        
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
 bool loadFromFile(BankListNode *head, const string &filepath)
 {
-    bool status = true;
+    if(!isValidPath(filepath))
+        return false;
+
     ifstream infile(filepath);
     if (!infile.is_open())
         return false;
+
+    bool status = true;
     auto *current = head;
     string line;
     while (std::getline(infile, line))
@@ -284,19 +309,26 @@ bool loadFromFile(BankListNode *head, const string &filepath)
 
 bool saveToFile(BankListNode *head, const string &filepath)
 {
+    if(!isValidPath(filepath))
+        return false;
+
     ofstream outfile(filepath);
     if (!outfile.is_open())
         return false;
+    
+    bool status = true;
+
     auto *current = head->next; 
     while (current != nullptr)
     {
         if(current->account == Account{}) 
         {
             current = current->next;
+            status = false;
             continue; 
         }
         outfile << accountToString(current->account) << std::endl;
         current = current->next;
     }
-    return true;
+    return status;
 }
