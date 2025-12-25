@@ -14,7 +14,7 @@ int main()
     Account acc2 = {"ABC002", "Alice", false, "alicepwd", 250000, {2023, 5, 15}, true};
     appendAccount(list, acc1);
     appendAccount(list, acc2);
-    // saveToFile(list, "test_accounts.txt");
+    saveToFile(list, "test_accounts.txt");
     auto *newList = createList();
     loadFromFile(newList, "test_accounts.txt");
     auto *current = newList->next;

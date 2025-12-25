@@ -186,7 +186,7 @@ void editAccount(BankListNode *node, const Account &newAccountData)
         node->account = newAccountData;
 }
 
-string accountToString(const Account &account)
+string accountToString_old(const Account &account)
 {
     string str;
     str += account.accountID + " ";
@@ -201,6 +201,26 @@ string accountToString(const Account &account)
     str += ss.str() + " ";
     str += (account.isFixed ? "定期" : "活期");
     return str;
+}
+
+string accountToString(const Account &account)
+{
+    // 格式说明：
+    // {}      : 默认字符串输出
+    // {:.2f}  : 浮点数，保留2位小数
+    // {:02}   : 整数，宽度为2，不足补0 (用于月/日)
+    // 日期格式化：不需要中间变量，直接将 年、月、日 拼在一起，例如 20230501
+    return std::format("{} {} {} {} {:.2f} {}{:02}{:02} {}", 
+        account.accountID,
+        account.ownerName,
+        (account.gender ? "男" : "女"),
+        account.password,
+        account.balance / 100.0, // 自动转为浮点格式化
+        account.creationDate.year, 
+        account.creationDate.month, 
+        account.creationDate.day,
+        (account.isFixed ? "定期" : "活期")
+    );
 }
 
 Account stringToAccount(const string &str)
@@ -327,7 +347,7 @@ bool saveToFile(BankListNode *head, const string &filepath)
             status = false;
             continue; 
         }
-        outfile << accountToString(current->account) << std::endl;
+        outfile << accountToString(current->account) << '\n';
         current = current->next;
     }
     return status;
