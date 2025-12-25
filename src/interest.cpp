@@ -18,5 +18,5 @@ long long interest(struct Account *p,struct Date day1){//p为用户，day1 为�
             else p->balance *= 1.04;//定期第三年及之后的每一年。
         }
     }
-    return 1.0*(p->balance - balance_1);
+    return p->balance - balance_1;
 }
