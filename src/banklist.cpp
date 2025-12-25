@@ -205,12 +205,8 @@ string accountToString_old(const Account &account)
 
 string accountToString(const Account &account)
 {
-    // 格式说明：
-    // {}      : 默认字符串输出
-    // {:.2f}  : 浮点数，保留2位小数
-    // {:02}   : 整数，宽度为2，不足补0 (用于月/日)
-    // 日期格式化：不需要中间变量，直接将 年、月、日 拼在一起，例如 20230501
-    return std::format("{} {} {} {} {:.2f} {}{:02}{:02} {}", 
+    // 使用 std::format 手动添加引号，以便读取时 std::quoted 处理空格
+    return std::format("\"{}\" \"{}\" {} \"{}\" {:.2f} {}{:02}{:02} {}", 
         account.accountID,
         account.ownerName,
         (account.gender ? "男" : "女"),
@@ -226,50 +222,55 @@ string accountToString(const Account &account)
 Account stringToAccount(const string &str)
 {
     stringstream ss(str);
-    string buf[7];
-    for(int i=0;i<7;i++)
+    Account acc;
+    string genderStr, balanceStr, dateStr, typeStr;
+
+    // 使用 std::quoted 读取带引号的字符串
+    if (!(ss >> std::quoted(acc.accountID) 
+             >> std::quoted(acc.ownerName) 
+             >> genderStr 
+             >> std::quoted(acc.password) 
+             >> balanceStr 
+             >> dateStr 
+             >> typeStr))
     {
-        if (!(ss >> buf[i])) return Account{};
+        return Account{};
     }
+
     string extra;
     if (ss >> extra) return Account{}; 
 
-    Account acc;
-    acc.accountID = buf[0];
-    acc.ownerName = buf[1];
-
-    if(buf[2] == "男")
+    if(genderStr == "男")
         acc.gender = true;
-    else if(buf[2] == "女")
+    else if(genderStr == "女")
         acc.gender = false;
     else
         return Account{};
         
-    acc.password = buf[3];
-    
-    string bStr = buf[4];
-    if (bStr.length() < 4 || bStr[bStr.length() - 3] != '.') return Account{};
-    bStr.erase(bStr.length() - 3, 1); // 移除小数点
+    // 处理余额
+    if (balanceStr.length() < 4 || balanceStr[balanceStr.length() - 3] != '.') return Account{};
+    balanceStr.erase(balanceStr.length() - 3, 1); // 移除小数点
     try {
-        acc.balance = std::stoll(bStr); // 直接转为以分为单位的整数
+        acc.balance = std::stoll(balanceStr); // 直接转为以分为单位的整数
     } catch (...) {
         return Account{};
     }
 
-    if (buf[5].length() != 8) return Account{};
+    // 处理日期
+    if (dateStr.length() != 8) return Account{};
     try {
-        acc.creationDate.year = std::stoi(buf[5].substr(0, 4));
-        acc.creationDate.month = std::stoi(buf[5].substr(4, 2));
-        acc.creationDate.day = std::stoi(buf[5].substr(6, 2));
+        acc.creationDate.year = std::stoi(dateStr.substr(0, 4));
+        acc.creationDate.month = std::stoi(dateStr.substr(4, 2));
+        acc.creationDate.day = std::stoi(dateStr.substr(6, 2));
     } catch (...) {
         return Account{};
     }
     if (!isValid(acc.creationDate))
         return Account{};
 
-    if (buf[6] == "定期")
+    if (typeStr == "定期")
         acc.isFixed = true;
-    else if (buf[6] == "活期")
+    else if (typeStr == "活期")
         acc.isFixed = false;
     else return
         Account{};
