@@ -4,6 +4,8 @@
 #include <string.h>
 #include "deposit&withdraw.h"
 #include "banklist.h"
+#include "Sort.h"
+#include "RecorrectKey.h"
 using std::cout;
 using std::cin;
 using std::getline;
@@ -100,12 +102,12 @@ int main(int argc, char **argv)
                     break;
                     case 'D':
                     {
-
+                        RecorrectKey(head);
                     }
                     break;
                     case 'E':
                     {
-
+                        Sort(head);
                     }
                     break;
                     case 'F':

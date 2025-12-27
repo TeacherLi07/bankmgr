@@ -138,6 +138,13 @@ Account stringToAccount(const string &str);
 bool isValidFilepath(const string &filepath);
 
 /**
+ * @brief 获取银行数据文件的标准路径
+ * @param filename 银行数据文件名
+ * @return 返回标准化的文件路径字符串
+ */
+string getResourcePath(const string& filename);
+
+/**
  * @brief 从文件加载账户信息到链表
  * @param head 链表头节点指针
  * @param filename 文件相对路径
