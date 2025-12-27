@@ -10,8 +10,8 @@ set_warnings("all")
 -- 针对 Windows/MinGW 环境添加编码转换标志
 if is_plat("windows", "mingw") then
     -- -finput-charset=UTF-8: 告诉编译器源码是 UTF-8 (通常默认就是，但显式指定更安全)
-    -- -fexec-charset=GBK:  告诉编译器把字符串字面量转成 GBK 存入 exe
-    add_cxflags("-finput-charset=UTF-8", "-fexec-charset=GBK")
+    -- -fexec-charset=UTF-8:  告诉编译器把字符串字面量转成 UTF-8 存入 exe
+    add_cxflags("-finput-charset=UTF-8", "-fexec-charset=UTF-8")
 end
 
 target("bankmgr")
