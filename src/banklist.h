@@ -147,7 +147,7 @@ string getResourcePath(const string& filename);
 /**
  * @brief 从文件加载账户信息到链表
  * @param head 链表头节点指针
- * @param filename 文件相对路径
+ * @param filename 文件名，函数会逐层向上查找bankdata目录，并从中读取文件
  * @return true表示全部加载成功，false表示有账户加载失败
  */
 bool loadFromFile(BankListNode *head, const string &filepath);
@@ -155,7 +155,7 @@ bool loadFromFile(BankListNode *head, const string &filepath);
 /**
  * @brief 将链表中的账户信息保存到文件
  * @param head 链表头节点指针
- * @param filename 文件相对路径
+ * @param filename 文件名，函数会逐层向上查找bankdata目录，并从中读取文件
  * @return true表示全部保存成功，false表示保存失败或有账户为空
  */
 bool saveToFile(BankListNode *head, const string &filepath);
