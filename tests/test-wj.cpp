@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Sort.h"
-
+#include "RecorrectKey.h"
 using std::cout;
 using std::endl;
 
@@ -37,7 +37,8 @@ void printList(const BankListNode *head)
              << a.creationDate.month << "-"
              << a.creationDate.day << "\t\t"
              << (a.isFixed ? "定期" : "活期")
-             << endl;
+             << a.password
+             <<endl;
         head = head->next;
     }
 }
@@ -60,8 +61,8 @@ int main()
     // 1. 准备 10 个测试数据
     Account testAccounts[10] = {
         {"ACC1001", "Alice",  false, "pwd1",  600000, {2023, 5, 20}, false},
-        {"ACC1005", "Alice",  true,  "pwd2",  200000, {2021, 1, 10}, true },
-        {"ACC1003", "Alice",true,  "pwd3",  800000, {2022, 3, 15}, false},
+        {"ACC1005", "Dl",  true,  "pwd2",  200000, {2021, 1, 10}, true },
+        {"ACC1003", "Fl",true,  "pwd3",  800000, {2022, 3, 15}, false},
         {"ACC1002", "Bob",    true,  "pwd4",  100000, {2020, 7,  1}, true },
         {"ACC1010", "Ivy",    false, "pwd5", 1500000, {2019,12, 30}, false},
         {"ACC1007", "Grace",  false, "pwd6",  300000, {2024, 2,  5}, true },
@@ -88,26 +89,12 @@ int main()
     cout << "===== 原始（带头结点，以下从 head->next 开始打印） =====" << endl;
     printList(head->next);
 
-    // 3. 按姓名排序测试
-    // 约定：SortByXXX 传入的是“带头结点的 head”，
-    // 返回的是排序后数据链表的首节点（即 head->next）
-    BankListNode *sortedByNameHead = SortByName(head);
-    cout << "\n===== 按姓名排序结果 =====" << endl;
-    printList(sortedByNameHead->next);
-
-    // 4. 按金额排序测试
-    BankListNode *sortedByMoneyHead = SortByMoney(head);
-    cout << "\n===== 按金额排序结果 =====" << endl;
-    printList(sortedByMoneyHead->next);
-
-    // 5. 按账号排序测试
-    BankListNode *sortedByAccountHead = SortByAccount(head);
-    cout << "\n===== 按账号排序结果 =====" << endl;
-    printList(sortedByAccountHead->next);
+    Sort(head);
 
     // 这里假设三个 SortByXXX 都是在“同一条链表上原地排序”的实现，
     // 所以最后只释放一次 head 即可
+    RecorrectKey(head);
+    printList(head->next);
     freeList(head);
-
     return 0;
 }

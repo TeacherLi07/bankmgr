@@ -52,7 +52,25 @@ struct AccountCmp{
         return a.accountID < b.accountID;
     }
 };
-
-
-
-
+/**
+ * @brief 创建用开户日期排序的结构体
+ */
+struct DateCmp{
+    bool operator()(const Account &a,const Account &b) const{
+        if (a.creationDate.year  != b.creationDate.year)
+            return a.creationDate.year  < b.creationDate.year;
+        if (a.creationDate.month != b.creationDate.month)
+            return a.creationDate.month < b.creationDate.month;
+        if (a.creationDate.day   != b.creationDate.day)
+            return a.creationDate.day   < b.creationDate.day;
+        return a.accountID < b.accountID;
+    }
+};
+/**
+ * @brief 排序逻辑实现函数
+ */
+void Sort(BankListNode *head);
+/**
+ * @brief 打印链表
+ */
+void print_whole_account(BankListNode* head);
