@@ -43,36 +43,36 @@ int main(int argc, char **argv)
         else if(choice_bank<='e'&&choice_bank>='a')
         {
             BankListNode* head=createList();
-            // loadFromFile(head, std::format("bankdata\\{}.txt", choice_bank));
+            loadFromFile(head, std::format("bankdata\\{}.txt", choice_bank));
             //手动输入一些账户用于测试
-            Account acc1;
-            acc1.accountID="1001";
-            acc1.ownerName="张三";
-            acc1.gender=true;
-            acc1.password="pass123";
-            acc1.balance=500000; // 5000.00元
-            acc1.creationDate={2022,5,20};
-            acc1.isFixed=false;
-            appendAccount(head,acc1);
-            Account acc2;
-            acc2.accountID="1002";
-            acc2.ownerName="李四";
-            acc2.gender=false;
-            acc2.password="word456";\
-            acc2.balance=1000000; // 10000.00元
-            acc2.creationDate={2021,8,15};
-            acc2.isFixed=true;
-            appendAccount(head,acc2);
-            Account acc3;
-            acc3.accountID="1003";
-            acc3.ownerName="王五";
-            acc3.gender=true;
-            acc3.password="abc789";
-            acc3.balance=750000; // 7500.00元
-            acc3.creationDate={2023,1,10};
-            acc3.isFixed=false;
-            appendAccount(head,acc3);
-            print_whole_account(head);
+            // Account acc1;
+            // acc1.accountID="1001";
+            // acc1.ownerName="张三";
+            // acc1.gender=true;
+            // acc1.password="pass123";
+            // acc1.balance=500000; // 5000.00元
+            // acc1.creationDate={2022,5,20};
+            // acc1.isFixed=false;
+            // appendAccount(head,acc1);
+            // Account acc2;
+            // acc2.accountID="1002";
+            // acc2.ownerName="李四";
+            // acc2.gender=false;
+            // acc2.password="word456";\
+            // acc2.balance=1000000; // 10000.00元
+            // acc2.creationDate={2021,8,15};
+            // acc2.isFixed=true;
+            // appendAccount(head,acc2);
+            // Account acc3;
+            // acc3.accountID="1003";
+            // acc3.ownerName="王五";
+            // acc3.gender=true;
+            // acc3.password="abc789";
+            // acc3.balance=750000; // 7500.00元
+            // acc3.creationDate={2023,1,10};
+            // acc3.isFixed=false;
+            // appendAccount(head,acc3);
+            // print_whole_account(head);
             bool flag=1;
             while(flag)
             {
