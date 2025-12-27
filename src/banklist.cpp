@@ -313,26 +313,13 @@ bool isValidPath(const string &filepath)
 }
 
 string getResourcePath(const string& filename) {
-    // 获取当前工作目录 (通常是项目根目录，如果在 VS Code 终端运行)
-    // 或者获取可执行文件路径 (更稳健)
     
-    // 简单做法：假设程序在项目根目录或其子目录运行，且 data 文件夹在项目根目录
     fs::path currentPath = fs::current_path();
     
-    // std::cout<<"Current Path: "<<currentPath<<std::endl;
-    // std::cout<<"Looking for: "<<(currentPath / "bankdata" / filename)<<std::endl;
-
-    // 检查当前目录下是否有 data 文件夹
-    if (fs::exists(currentPath / "bankdata" / filename)) {
-        return (currentPath / "bankdata" / filename).string();
-    }
-    
-    // 如果是在 build 目录下运行 (例如 build/windows/x64/release/bankmgr.exe)
-    // 向上查找直到找到 data 目录
+    // 向上查找 bankdata 目录
     fs::path p = currentPath;
     for (int i = 0; i < 5; ++i) { // 最多向上查找5层
-        // std::cout<<"Looking for: "<<(p / "bankdata" / filename)<<std::endl;
-        if (fs::exists(p / "bankdata" / filename)) {
+        if (fs::exists(p / "bankdata") && fs::is_directory(p / "bankdata")) {
             return (p / "bankdata" / filename).string();
         }
         if (p.has_parent_path()) {
@@ -342,11 +329,11 @@ string getResourcePath(const string& filename) {
         }
     }
 
-    // 如果都找不到，返回原始文件名，寄希望于它就在旁边
-    return filename;
+    // 如果找不到 bankdata 目录，默认拼接在当前目录下的 bankdata
+    return (currentPath / "bankdata" / filename).string();
 }
 
-bool loadFromFile(BankListNode *head, const string &filepath)
+bool loadFromFile(BankListNode *head, const string &filename)
 {
     // 强制设置控制台输入输出代码页为 UTF-8 (65001)
     // 确保 std::cout 能正确打印 UTF-8 字符而不乱码
@@ -355,7 +342,7 @@ bool loadFromFile(BankListNode *head, const string &filepath)
     SetConsoleCP(65001);
     #endif
 
-    string standardPath = getResourcePath(filepath);
+    string standardPath = getResourcePath(filename);
 
     if(!isValidPath(standardPath))
         return false;
@@ -387,12 +374,14 @@ bool loadFromFile(BankListNode *head, const string &filepath)
     return status;
 }
 
-bool saveToFile(BankListNode *head, const string &filepath)
+bool saveToFile(BankListNode *head, const string &filename)
 {
-    if(!isValidPath(filepath))
+    string fullPath = getResourcePath(filename);
+
+    if(!isValidPath(fullPath))
         return false;
 
-    ofstream outfile(filepath);
+    ofstream outfile(fullPath);
     if (!outfile.is_open())
         return false;
     
