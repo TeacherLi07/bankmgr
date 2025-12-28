@@ -31,60 +31,60 @@ int main(int argc, char **argv)
         {
             BankListNode* head=createList();
             // //载入该银行的账户信息
-            //     string filename;
-            //     switch(choice_bank)
-            //     {
-            //         case 'a':
-            //         filename="a.txt";
-            //         break;
-            //         case 'b':
-            //         filename="b.txt";
-            //         break;
-            //         case 'c':
-            //         filename="c.txt";
-            //         break;
-            //         case 'd':
-            //         filename="d.txt";
-            //         break;
-            //         case 'e':
-            //         filename="e.txt";
-            //         break;
-            //     }
-            //     bool load_status=loadFromFile(head,filename);
-            //     if(!load_status)
-            //     {
-            //         cout<<"部分账户加载失败，可能是文件格式错误或文件不存在，请检查文件"<<filename<<"的完整性。\n";
-            //     }
+                string filename;
+                switch(choice_bank)
+                {
+                    case 'a':
+                    filename="a.txt";
+                    break;
+                    case 'b':
+                    filename="b.txt";
+                    break;
+                    case 'c':
+                    filename="c.txt";
+                    break;
+                    case 'd':
+                    filename="d.txt";
+                    break;
+                    case 'e':
+                    filename="e.txt";
+                    break;
+                }
+                bool load_status=loadFromFile(head,filename);
+                if(!load_status)
+                {
+                    cout<<"部分账户加载失败，可能是文件格式错误或文件不存在，请检查文件"<<filename<<"的完整性。\n";
+                }
             //手动载入信息给head供测试用
-            Account acc1;
-            acc1.accountID="1001";
-            acc1.ownerName="张三";
-            acc1.gender=true;
-            acc1.password="pass123";
-            acc1.balance=500000; // 5000.00元
-            acc1.creationDate={2022,5,20};
-            acc1.isFixed=false;
-            appendAccount(head,acc1);
-            Account acc2;
-            acc2.accountID="1002";
-            acc2.ownerName="李四";
-            acc2.gender=false;
-            acc2.password="word456";\
-            acc2.balance=1000000; // 10000.00元
-            acc2.creationDate={2021,8,15};
-            acc2.isFixed=true;
-            appendAccount(head,acc2);
-            Account acc3;
-            acc3.accountID="1003";
-            acc3.ownerName="王五";
-            acc3.gender=true;
-            acc3.password="abc789";
-            acc3.balance=750000; // 7500.00元
-            acc3.creationDate={2023,1,10};
-            acc3.isFixed=false;
-            appendAccount(head,acc3);
-            print_whole_account(head);
-            cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
+            // Account acc1;
+            // acc1.accountID="1001";
+            // acc1.ownerName="张三";
+            // acc1.gender=true;
+            // acc1.password="pass123";
+            // acc1.balance=500000; // 5000.00元
+            // acc1.creationDate={2022,5,20};
+            // acc1.isFixed=false;
+            // appendAccount(head,acc1);
+            // Account acc2;
+            // acc2.accountID="1002";
+            // acc2.ownerName="李四";
+            // acc2.gender=false;
+            // acc2.password="word456";\
+            // acc2.balance=1000000; // 10000.00元
+            // acc2.creationDate={2021,8,15};
+            // acc2.isFixed=true;
+            // appendAccount(head,acc2);
+            // Account acc3;
+            // acc3.accountID="1003";
+            // acc3.ownerName="王五";
+            // acc3.gender=true;
+            // acc3.password="abc789";
+            // acc3.balance=750000; // 7500.00元
+            // acc3.creationDate={2023,1,10};
+            // acc3.isFixed=false;
+            // appendAccount(head,acc3);
+            // print_whole_account(head);
+            // cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
             print_whole_account(head);
             bool flag=1;
             while(flag)
