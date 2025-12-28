@@ -12,29 +12,14 @@ using std::cout;
 using std::cin;
 using std::getline;
 //打印所有账户信息，测试用
-void print_whole_account(BankListNode* head)
-{
-    BankListNode* p=head->next;
-    while(p!=nullptr)
-    {
-        cout<<"账户ID:"<<p->account.accountID<<'\n';
-        cout<<"账户姓名:"<<p->account.ownerName<<'\n';
-        cout<<"账户性别:"<< (p->account.gender ? "男" : "女")<<'\n';
-        cout<<"账户余额:"<<p->account.balance/100.0<<'\n';      
-        cout<<"账户创建日期:"<<p->account.creationDate.year<<"-"<<p->account.creationDate.month<<"-"<<p->account.creationDate.day<<'\n';
-        cout<<"账户类型:"<<(p->account.isFixed ? "定期" : "活期")<<'\n';
-        cout<<"---------------------------"<<'\n';
-        p=p->next;
-    }
-}
+
 int main(int argc, char **argv) 
 {
-    SetConsoleOutputCP(936); 
-    SetConsoleCP(936);
+    SetConsoleOutputCP(65001); 
+    SetConsoleCP(65001);
     cout<<"欢迎登陆梅依哥诗人---银行管理系统"<<'\n';
     while(1)
-    {
-        
+    {  
         cout<<"请选择你需要操作的账户所在的银行代码:a,b,c,d,e\n若想要退出请输入0\n";
         char choice_bank;
         cin>>choice_bank;
@@ -47,8 +32,32 @@ int main(int argc, char **argv)
         else if(choice_bank<='e'&&choice_bank>='a')
         {
             BankListNode* head=createList();
-            loadFromFile(head, std::format("bankdata\\{}.txt", choice_bank));
-            //手动输入一些账户用于测试
+            // //载入该银行的账户信息
+                string filename;
+                switch(choice_bank)
+                {
+                    case 'a':
+                    filename="a.txt";
+                    break;
+                    case 'b':
+                    filename="b.txt";
+                    break;
+                    case 'c':
+                    filename="c.txt";
+                    break;
+                    case 'd':
+                    filename="d.txt";
+                    break;
+                    case 'e':
+                    filename="e.txt";
+                    break;
+                }
+                bool load_status=loadFromFile(head,filename);
+                if(!load_status)
+                {
+                    cout<<"部分账户加载失败，可能是文件格式错误或文件不存在，请检查文件"<<filename<<"的完整性。\n";
+                }
+            //手动载入信息给head供测试用
             // Account acc1;
             // acc1.accountID="1001";
             // acc1.ownerName="张三";
@@ -62,7 +71,7 @@ int main(int argc, char **argv)
             // acc2.accountID="1002";
             // acc2.ownerName="李四";
             // acc2.gender=false;
-            // acc2.password="word456";\
+            // acc2.password="word456";
             // acc2.balance=1000000; // 10000.00元
             // acc2.creationDate={2021,8,15};
             // acc2.isFixed=true;
@@ -77,6 +86,8 @@ int main(int argc, char **argv)
             // acc3.isFixed=false;
             // appendAccount(head,acc3);
             // print_whole_account(head);
+            // cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
+            print_whole_account(head);
             bool flag=1;
             while(flag)
             {
@@ -105,6 +116,7 @@ int main(int argc, char **argv)
                     case 'D':
                     {
                         RecorrectKey(head);
+                        // saveToFile(head,filename);
                     }
                     break;
                     case 'E':
@@ -169,7 +181,7 @@ int main(int argc, char **argv)
                                 printf("请输入正确的账户编号\n");
                             }
                         }
-
+                        // saveToFile(head,filename);
                     }
                     break;
                     case 'G':
@@ -233,16 +245,19 @@ int main(int argc, char **argv)
                                 printf("请输入正确的账户编号\n");
                             }
                         }
+                        // saveToFile(head,filename);
                     }
                     break;
                     case 'H':
                     {
-                        
+                        transfer_accounts(head,choice_bank);//并未存入数据
+                        // saveToFile(head,filename);
                     }
                     break;
                     case 'I':
                     {
-                        
+                        calculate_interest(head);
+                        // saveToFile(head,filename);
                     }
                     break;
 
@@ -262,7 +277,6 @@ int main(int argc, char **argv)
             continue;
         }
     }
-    //保存并退出
-
+    
     return 0;
 }
