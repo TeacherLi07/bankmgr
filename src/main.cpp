@@ -71,7 +71,7 @@ int main(int argc, char **argv)
             // acc2.accountID="1002";
             // acc2.ownerName="李四";
             // acc2.gender=false;
-            // acc2.password="word456";\
+            // acc2.password="word456";
             // acc2.balance=1000000; // 10000.00元
             // acc2.creationDate={2021,8,15};
             // acc2.isFixed=true;
@@ -250,12 +250,14 @@ int main(int argc, char **argv)
                     break;
                     case 'H':
                     {
-                        
+                        transfer_accounts(head,choice_bank);//并未存入数据
+                        // saveToFile(head,filename);
                     }
                     break;
                     case 'I':
                     {
-                        
+                        calculate_interest(head);
+                        // saveToFile(head,filename);
                     }
                     break;
 

@@ -88,7 +88,7 @@ void transfer_accounts(BankListNode* head,char choice_bank){
             } else {
                 // 不同银行，需要加载目标银行的链表
                 BankListNode* target_head = createList();
-                loadFromFile(target_head, std::format("bankdata\\{}.txt", target_bank));
+                loadFromFile(target_head, std::format("{}.txt", target_bank));
                 target_account = find_accountID(target_head, target_accountID);
                 if (target_account) {
                     // 保存指针以便后续使用

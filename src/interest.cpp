@@ -62,12 +62,30 @@ void calculate_interest(BankListNode* head)
         // 输入存款到期时间
         Date maturityDate;
         long long number;
-        cout << "请输入存款到期时间：\n";
-        cin >> number;
-        maturityDate.year = number / 10000;
-        maturityDate.month = (number - maturityDate.year*10000)/100;
-        maturityDate.day = number - maturityDate.year*10000 - maturityDate.month*100;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        while(1)
+        {
+            cout << "请输入存款到期时间（YYYYMMDD）：（输入0退出计算服务）\n";
+            cin >> number;
+            if(number == 0)
+            {
+                cout << "退出利息计算\n";
+                return;
+            }
+            maturityDate.year = number / 10000;
+            maturityDate.month = (number - maturityDate.year*10000)/100;
+            maturityDate.day = number - maturityDate.year*10000 - maturityDate.month*100;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(isValid(maturityDate) && maturityDate > creationDate)
+            {
+                break;
+            }
+            else
+            {
+                cout << "输入的日期无效或早于开户日期，请重新输入！\n";
+            }
+        }
+        
+        
         
         // 计算存款天数
         int depositDays = calculateDaysBetween(creationDate, maturityDate);
