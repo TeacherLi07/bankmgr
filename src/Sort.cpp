@@ -105,6 +105,11 @@ void Sort(BankListNode *head)
 void print_whole_account(BankListNode* head)
 {
     BankListNode* p=head->next;
+    if(p==nullptr)
+    {
+        cout<<"当前银行无任何账户信息！"<<endl;
+        return;
+    }
     while(p!=nullptr)
     {
         cout<<"账户ID:"<<p->account.accountID<<'\n';

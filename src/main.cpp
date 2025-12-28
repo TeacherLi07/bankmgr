@@ -10,25 +10,11 @@ using std::cout;
 using std::cin;
 using std::getline;
 //打印所有账户信息，测试用
-void print_whole_account(BankListNode* head)
-{
-    BankListNode* p=head->next;
-    while(p!=nullptr)
-    {
-        cout<<"账户ID:"<<p->account.accountID<<'\n';
-        cout<<"账户姓名:"<<p->account.ownerName<<'\n';
-        cout<<"账户性别:"<< (p->account.gender ? "男" : "女")<<'\n';
-        cout<<"账户余额:"<<p->account.balance/100.0<<'\n';      
-        cout<<"账户创建日期:"<<p->account.creationDate.year<<"-"<<p->account.creationDate.month<<"-"<<p->account.creationDate.day<<'\n';
-        cout<<"账户类型:"<<(p->account.isFixed ? "定期" : "活期")<<'\n';
-        cout<<"---------------------------"<<'\n';
-        p=p->next;
-    }
-}
+
 int main(int argc, char **argv) 
 {
-    SetConsoleOutputCP(936); 
-    SetConsoleCP(936);
+    SetConsoleOutputCP(65001); 
+    SetConsoleCP(65001);
     cout<<"欢迎登陆梅依哥诗人---银行管理系统"<<'\n';
     while(1)
     {
@@ -45,36 +31,34 @@ int main(int argc, char **argv)
         else if(choice_bank<='e'&&choice_bank>='a')
         {
             BankListNode* head=createList();
-            loadFromFile(head, std::format("bankdata\\{}.txt", choice_bank));
-            //手动输入一些账户用于测试
-            // Account acc1;
-            // acc1.accountID="1001";
-            // acc1.ownerName="张三";
-            // acc1.gender=true;
-            // acc1.password="pass123";
-            // acc1.balance=500000; // 5000.00元
-            // acc1.creationDate={2022,5,20};
-            // acc1.isFixed=false;
-            // appendAccount(head,acc1);
-            // Account acc2;
-            // acc2.accountID="1002";
-            // acc2.ownerName="李四";
-            // acc2.gender=false;
-            // acc2.password="word456";\
-            // acc2.balance=1000000; // 10000.00元
-            // acc2.creationDate={2021,8,15};
-            // acc2.isFixed=true;
-            // appendAccount(head,acc2);
-            // Account acc3;
-            // acc3.accountID="1003";
-            // acc3.ownerName="王五";
-            // acc3.gender=true;
-            // acc3.password="abc789";
-            // acc3.balance=750000; // 7500.00元
-            // acc3.creationDate={2023,1,10};
-            // acc3.isFixed=false;
-            // appendAccount(head,acc3);
-            // print_whole_account(head);
+            //载入该银行的账户信息
+                string filename;
+                switch(choice_bank)
+                {
+                    case 'a':
+                    filename="a.txt";
+                    break;
+                    case 'b':
+                    filename="b.txt";
+                    break;
+                    case 'c':
+                    filename="c.txt";
+                    break;
+                    case 'd':
+                    filename="d.txt";
+                    break;
+                    case 'e':
+                    filename="e.txt";
+                    break;
+                }
+                string filepath=getResourcePath(filename);
+                bool load_status=loadFromFile(head,filepath);
+                if(!load_status)
+                {
+                    cout<<"部分账户加载失败，可能是文件格式错误或文件不存在，请检查文件"<<filename<<"的完整性。\n";
+                }
+            cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
+            print_whole_account(head);
             bool flag=1;
             while(flag)
             {
@@ -103,6 +87,7 @@ int main(int argc, char **argv)
                     case 'D':
                     {
                         RecorrectKey(head);
+                        saveToFile(head,filepath);
                     }
                     break;
                     case 'E':
@@ -167,7 +152,7 @@ int main(int argc, char **argv)
                                 printf("请输入正确的账户编号\n");
                             }
                         }
-
+                        saveToFile(head,filepath);
                     }
                     break;
                     case 'G':
@@ -231,6 +216,7 @@ int main(int argc, char **argv)
                                 printf("请输入正确的账户编号\n");
                             }
                         }
+                        saveToFile(head,filepath);
                     }
                     break;
                     case 'H':
@@ -260,7 +246,6 @@ int main(int argc, char **argv)
             continue;
         }
     }
-    //保存并退出
-
+    
     return 0;
 }
