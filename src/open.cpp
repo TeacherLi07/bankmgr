@@ -106,7 +106,7 @@ void queryAccount(BankListNode* head, int choice, const string& targetID,
     cout << "查询操作" << endl;
     cout << "请选择查询方式：" << endl;
     cout << "1. 按账号查询  2. 按姓名查询  3. 按开户日期查询  4. 查询全部" << endl;
-    int choice;
+ //   int choice;
     cin >> choice;
     BankListNode* p = head->next;
     bool found = false;
