@@ -1,158 +1,304 @@
+#pragma once
 #include "open.h"
 #include <iostream>
-using std::cin,std::cout,std::endl;
+using std::cin, std::cout, std::endl;
+
 //输入新的账户,bool型判断是否成功开户
-// 返回值：bool - 开户是否成功（true成功，false失败）
-bool openAccount(BankListNode* head, Account newaccount) {
-    // 开户操作：
-    // 请输入账号：
-    // 接收账号（由调用方传入newaccount.accountID）
+void openAccount(BankListNode* head) {
+    Account newaccount;
+    // 新增标志位：标记是否需要退出当前函数
+    bool exitFlag = false;
+
+    cout << "开户操作：" << endl;
+    cout << "请输入账号（输入0退出当前操作）：";
+    cin >> newaccount.accountID;
     
-    // 检验是否存在账户
+    // 输入0退出当前操作
+    if (newaccount.accountID == "0") {
+        cout << "您选择退出当前操作..." << endl;
+        return; // 直接返回，退出函数
+    }
+
+    //检验是否存在账户
     BankListNode* p = head->next;
-    while (p != nullptr) {
+    while (p != NULL) {
         if (p->account.accountID == newaccount.accountID) {
-            // 错误：该账号已存在！开户失败。
-            return false; // 账号已存在，开户失败
+            cout << "错误：该账号已存在！开户失败。" << endl;
+            return;
         }
         p = p->next;
     }
+    //输入后续选项
+    cout << "请输入开户人姓名（输入0退出当前操作）：";
+    cin >> newaccount.ownerName;
     
-    // 请输入开户人姓名：
-    // 接收开户人姓名（由调用方传入newaccount.ownerName）
+    // 输入0退出当前操作
+    if (newaccount.ownerName == "0") {
+        cout << "您选择退出当前操作..." << endl;
+        return; // 直接返回，退出函数
+    }
+
+    // 性别输入改为循环，用break跳出循环
+    int inputgender = -1;
+    while (true) {
+        cout << "请输入性别（男性:1，女性:0，输入0退出当前操作）：";
+        cin >> inputgender;
+        
+        // 输入0退出当前操作
+        if (inputgender == 0) {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        } else if (inputgender == 1) {
+            newaccount.gender = true;
+            break; // 跳出性别输入循环
+        } else {
+            cout << "不支持其他性别！请重新输入！" << endl;
+        }
+    }
+
+    cout << "请输入密码（输入0退出当前操作）：";
+    cin >> newaccount.password;
     
-    // 请输入性别（男性:1，女性:0）：
-    // 接收性别输入（由调用方完成性别赋值及校验）
-    // if (inputgender == 1)newaccount.gender = true;
-    // else if (inputgender == 0)newaccount.gender = false;
-    // else {
-    //     不支持其他性别！
-    //     return false; // 性别不合法，开户失败
-    // }
-    
-    // 请输入密码：
-    // 接收密码（由调用方传入newaccount.password）
-    
-    // 请输入开户金额（单位：元）：
-    // 接收开户金额（由调用方传入对应金额，此处执行单位换算）
-    double balanceInput = newaccount.balance / 100; // 保持原变量名，还原输入金额（若无需还原可删除）
-    newaccount.balance = balanceInput * 100; // 单位换算，元转为分
-    
-    // 请输入开户日期（输入：年 月 日，空格分隔）：
-    // 接收开户日期（由调用方传入newaccount.creationDate的年、月、日）
-    
-    // 请选择账户类型（定期：1，活期：0）：
-    // 接收账户类型输入（由调用方完成账户类型赋值及校验）
-    // if (current == 1)newaccount.isFixed = true;
-    // else if (current == 0)newaccount.isFixed = false;
-    // else {
-    //     请输入正确的账户类型！
-    //     return false; // 账户类型不合法，开户失败
-    // }
-    
+    // 输入0退出当前操作
+    if (newaccount.password == "0") {
+        cout << "您选择退出当前操作..." << endl;
+        return; // 直接返回，退出函数
+    }
+
+    // 金额输入改为循环，用break跳出循环
+    double balanceInput = -1;
+    while (true) {
+        cout << "请输入开户金额（单位：元，输入0退出当前操作）：";
+        cin >> balanceInput;
+        
+        // 输入0退出当前操作
+        if (balanceInput == 0) {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        } else if (balanceInput > 0) {
+            newaccount.balance = balanceInput * 100;//单位换算，元转为分
+            break; // 跳出金额输入循环
+        } else {
+            cout << "开户金额不能为负数！请重新输入！" << endl;
+        }
+    }
+
+    // 日期输入改为循环，用break跳出循环
+    int year = -1, month = -1, day = -1;
+    while (true) {
+        cout << "请输入开户日期（输入：年 月 日，空格分隔，输入0退出当前操作）：";
+        cin >> year >> month >> day;
+        
+        // 任意日期字段输入0退出当前操作
+        if (year == 0 || month == 0 || day == 0) {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        } else if (year >= 1900 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+            newaccount.creationDate.year = year;
+            newaccount.creationDate.month = month;
+            newaccount.creationDate.day = day;
+            break; // 跳出日期输入循环
+        } else {
+            cout << "日期格式非法！请重新输入！" << endl;
+        }
+    }
+
+    // 账户类型输入改为循环，用break跳出循环
+    int current = -1;
+    while (true) {
+        cout << "请选择账户类型（定期：1，活期：0，输入0退出当前操作）：";
+        cin >> current;
+        
+        // 输入0退出当前操作
+        if (current == 0) {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        } else if (current == 1) {
+            newaccount.isFixed = true;
+            break; // 跳出类型输入循环
+        } else {
+            cout << "请输入正确的账户类型！请重新输入！" << endl;
+        }
+    }
+
     appendAccount(head, newaccount);
-    // 开户成功
-    return true; // 开户成功
+    cout << "开户成功" << endl;
+    return;
 }
 
-// 销户函数：移除输入输出，仅处理账户数据逻辑
-// 参数说明：
-// head - 银行链表头节点
-// inputaccountID - 待注销的账号（由调用方传入）
-// inputpassword - 待注销账户的密码（由调用方传入）
-// 返回值：int - 销户结果状态码
-//         0：销户成功
-//         1：银行无账户，销户失败
-//         2：密码输入错误，销户失败
-//         3：未找到该账号，销户失败
-int cancelaccount(BankListNode* head, string inputaccountID, string inputpassword) {
+void cancelaccount(BankListNode* head) {
     if (isEmpty(head)) {
-        // 当前银行无任何账户信息，销户失败。
-        return 1; // 无账户，销户失败
+        cout << "当前银行无任何账户信息，销户失败。" << endl;
+        return;
     }
+    cout << "销户操作：" << endl;
+    cout << "请输入要注销的账户（输入0退出当前操作）：";
+    string inputpassword, inputaccountID;
+    cin >> inputaccountID;
     
-    // 销户操作：
-    // 请输入要注销的账户：
-    // 接收待注销账号（由调用方传入inputaccountID）
-    // 请输入账户密码：
-    // 接收账户密码（由调用方传入inputpassword）
+    // 输入0退出当前操作
+    if (inputaccountID == "0") {
+        cout << "您选择退出当前操作..." << endl;
+        return; // 直接返回，退出函数
+    }
+
+    cout << "请输入账户密码（输入0退出当前操作）：";
+    cin >> inputpassword;
     
+    // 输入0退出当前操作
+    if (inputpassword == "0") {
+        cout << "您选择退出当前操作..." << endl;
+        return; // 直接返回，退出函数
+    }
+
     BankListNode* p = head->next;
-    while (p != nullptr) {
+    while (p != NULL) {
         if (p->account.accountID == inputaccountID) {
             if (p->account.password == inputpassword) {
                 p->account.balance = 0;
                 deleteAccount(head, p);
-                // 销户成功，账户已删除。
-                return 0; // 销户成功
+                cout << "销户成功，账户已删除。" << endl;
+                return;
             } else {
-                // 错误：密码输入错误！销户失败。
-                return 2; // 密码错误，销户失败
+                cout << "错误：密码输入错误！销户失败。" << endl;
+                return;
             }   
         }
         p = p->next;
     }
-    
-    // 错误：未找到该账号，销户失败。
-    return 3; // 未找到账号，销户失败
+    cout << "错误：未找到该账号，销户失败。" << endl;
+    return;
 }
 
-void printAccount(const Account& acc) {
-    //输入需要输出的东西
-};
+void print_whole_account(const Account& acc)
+{
+    cout << "账户ID:" << acc.accountID << '\n';
+    cout << "账户姓名:" << acc.ownerName << '\n';
+    cout << "账户性别:" << (acc.gender ? "男" : "女") << '\n';
+    cout << "账户余额:" << acc.balance / 100.0 << " 元" << '\n';
+    cout << "账户创建日期:" << acc.creationDate.year << "-" << acc.creationDate.month << "-" << acc.creationDate.day << '\n';
+    cout << "账户类型:" << (acc.isFixed ? "定期" : "活期") << '\n';
+}
 
 void queryAccount(BankListNode* head, int choice, const string& targetID,
     const string& targetName, const Date& targetDate) {
-    if (isEmpty(head)) { // 是否为空函数
-        //cout << "当前银行无任何账户信息！" << endl;
+    if (isEmpty(head)) { 
+        cout << "当前银行无任何账户信息！" << endl;
         return;
     }
-    //查询操作
-    //"1. 按账号查询  2. 按姓名查询  3. 按开户日期查询  4. 查询全部" << endl;
-    //int num;
-    //cin >> num;选择输入
+
+    // 查询方式输入改为循环，用break跳出循环
+    while (true) {
+        cout << "查询操作" << endl;
+        cout << "请选择查询方式（输入0退出当前操作）：" << endl;
+        cout << "1. 按账号查询  2. 按姓名查询  3. 按开户日期查询  4. 查询全部" << endl;
+        cin >> choice;
+        
+        // 输入0退出当前操作
+        if (choice == 0) {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        } else if (choice >= 1 && choice <= 4) {
+            break; // 跳出查询方式选择循环
+        } else {
+            cout << "错误：查询方式选择无效！请重新输入！" << endl;
+        }
+    }
+
     BankListNode* p = head->next;
     bool found = false;
+
     switch (choice) {
-    case 1:
+    case 1: { // 按账号查询
+        string targetID;
+        cout << "请输入要查询的账号（输入0退出当前操作）：";
+        cin >> targetID;
+        
+        // 输入0退出当前操作
+        if (targetID == "0") {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        }
+
         while (p != nullptr) {
             if (p->account.accountID == targetID) {
-                printAccount(p->account);
+                cout << "找到账户信息：" << endl;
+                cout << "------------------------" << endl;
+                print_whole_account(p->account);
                 found = true;
+                break;
             }
             p = p->next;
         }
         break;
-    case 2:
+    }
+    case 2: { // 按姓名查询
+        string targetName;
+        cout << "请输入要查询的姓名（输入0退出当前操作）：";
+        cin >> targetName;
+        
+        // 输入0退出当前操作
+        if (targetName == "0") {
+            cout << "您选择退出当前操作..." << endl;
+            return; // 直接返回，退出函数
+        }
+
+        cout << "找到以下同名账户：" << endl;
+        cout << "------------------------" << endl;
         while (p != nullptr) {
             if (p->account.ownerName == targetName) {
-                printAccount(p->account);
+                print_whole_account(p->account);
                 found = true;
             }
             p = p->next;
         }
         break;
-    case 3:
+    }
+    case 3: { // 按开户日期查询
+        Date targetDate;
+        // 日期输入改为循环，用break跳出循环
+        while (true) {
+            cout << "请输入要查询的开户日期（格式：年 月 日，空格分隔，输入0退出当前操作）：";
+            cin >> targetDate.year >> targetDate.month >> targetDate.day;
+            
+            // 任意日期字段输入0退出当前操作
+            if (targetDate.year == 0 || targetDate.month == 0 || targetDate.day == 0) {
+                cout << "您选择退出当前操作..." << endl;
+                return; // 直接返回，退出函数
+            } else if (targetDate.year >= 1900 && targetDate.month >= 1 && targetDate.month <= 12 && targetDate.day >= 1 && targetDate.day <= 31) {
+                break; // 跳出日期输入循环
+            } else {
+                cout << "日期格式非法！请重新输入！" << endl;
+            }
+        }
+
+        cout << "找到以下同日开户账户：" << endl;
+        cout << "------------------------" << endl;
         while (p != nullptr) {
             if (p->account.creationDate == targetDate) {
-                printAccount(p->account);
+                print_whole_account(p->account); 
                 found = true;
             }
             p = p->next;
         }
         break;
-    case 4:
+    }
+    case 4: { // 查询全部
+        cout << "当前银行所有账户信息：" << endl;
+        cout << "------------------------" << endl;
         while (p != nullptr) {
-            printAccount(p->account);
+            print_whole_account(p->account);
             found = true;
             p = p->next;
         }
         break;
-
+    }
     default:
+        cout << "错误：查询方式选择无效！" << endl;
         return;
     }
+
     if (!found) {
-        //未找到相关输入
-    }   
+        cout << "未找到符合条件的账户！" << endl;
+    }
 }
