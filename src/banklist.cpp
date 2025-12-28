@@ -122,7 +122,7 @@ bool operator==(const Account &a1, const Account &a2)
 
 bool isValid(const Date &d)
 {
-    if (d.year < 1900 || d.month < 1 || d.month > 12 || d.day < 1)
+    if (d.year < 1900 || d.year > 2500 || d.month < 1 || d.month > 12 || d.day < 1)
         return false;
     const int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     bool isr = (d.year % 4 == 0 && d.year % 100 != 0) || (d.year % 400 == 0);
