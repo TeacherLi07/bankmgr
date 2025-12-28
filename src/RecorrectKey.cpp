@@ -14,7 +14,7 @@ void RecorrectKey(BankListNode *head)
     int flag=0;
     while(1)
     {
-        cin>>temp_account;
+        getline(cin,temp_account);
         if (temp_account=="0")break;
         else if(find_accountID(head,temp_account)==nullptr)
         {
@@ -27,12 +27,12 @@ void RecorrectKey(BankListNode *head)
             while(1)
             {
                 string password;
-                cin>>password;
+                getline(cin,password);
                 if (password_is_correct(find_accountID(head,temp_account),password))
                 {
                     cout<<"请输入你要修改的密码:";
                     string RecorrectPassword;
-                    cin>>RecorrectPassword;
+                    getline(cin,RecorrectPassword);
                     find_accountID(head,temp_account)->account.password=RecorrectPassword;
                     flag=1;
                     cout<<"密码修改成功！\n";
