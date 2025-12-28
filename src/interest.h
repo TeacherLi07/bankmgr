@@ -7,4 +7,4 @@
  * @param day1 存款到期日期
  * @return 计算得到的利息（以分为单位）
  */
-long long interest(struct Account p,struct Date day1);
+void calculate_interest(BankListNode* head);

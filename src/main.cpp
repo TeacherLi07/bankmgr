@@ -4,6 +4,8 @@
 #include <string.h>
 #include "deposit&withdraw.h"
 #include "banklist.h"
+#include"interest.h"
+#include"transfer_accounts.h"
 #include "Sort.h"
 #include "RecorrectKey.h"
 using std::cout;
