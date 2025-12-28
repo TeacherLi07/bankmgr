@@ -8,6 +8,7 @@ bool password_is_correct(BankListNode* target_Account,string Orginalpassword)
 //修改密码函数
 void RecorrectKey(BankListNode *head)
 {
+    show_all_accountIDs(head);
     cout<<"请输入你要查询账户的编号:";
     string temp_account;
     int flag=0;
@@ -34,6 +35,7 @@ void RecorrectKey(BankListNode *head)
                     cin>>RecorrectPassword;
                     find_accountID(head,temp_account)->account.password=RecorrectPassword;
                     flag=1;
+                    cout<<"密码修改成功！\n";
                     break;
                 }
                 else if (password=="0")
