@@ -106,7 +106,9 @@ void calculate_interest(BankListNode* head)
             double annualRate = 0.0035;
             while(depositDays >= 365){
             balance_fen += balance_fen * annualRate;
-            depositDays -= 365;
+            bool isr = (creationDate.year % 4 == 0 && creationDate.year % 100 != 0) || (creationDate.year % 400 == 0);
+            depositDays -= 365 + isr;
+            depositYears++;
             }
             if(depositDays != 0) balance_fen += balance_fen * annualRate * 0.5;
         }
@@ -133,7 +135,8 @@ void calculate_interest(BankListNode* head)
                 double annualRate = 0.04;
                 balance_fen += balance_fen * annualRate;
             }
-            depositDays -= 365;
+            bool isr = (creationDate.year % 4 == 0 && creationDate.year % 100 != 0) || (creationDate.year % 400 == 0);
+            depositDays -= 365 + isr;
         }
     }
             
