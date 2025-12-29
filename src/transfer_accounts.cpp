@@ -33,6 +33,12 @@ void transfer_accounts(BankListNode* head,char choice_bank){
                 cout << "退出转账\n";
                 return;
             }
+            for(int i = 0; i < password_input.length(); i++) {
+                if(password_input[i] == ' ') {
+                    cout << "密码不能包含空格，请重新输入！\n";
+                    continue;
+                }
+            }
             
             if (password_correct(source_account, password_input)) {
                 cout << "密码验证成功！\n";
