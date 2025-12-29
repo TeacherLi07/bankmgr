@@ -42,6 +42,12 @@ void calculate_interest(BankListNode* head)
                 cout << "退出利息计算\n";
                 return;
             }
+            for(int i = 0; i < password_input.length(); i++) {
+                if(password_input[i] == ' ') {
+                    cout << "密码不能包含空格，请重新输入！\n";
+                    continue;
+                }
+            }
             
             if(password_correct(target_account, password_input))
             {
@@ -100,7 +106,9 @@ void calculate_interest(BankListNode* head)
             double annualRate = 0.0035;
             while(depositDays >= 365){
             balance_fen += balance_fen * annualRate;
-            depositDays -= 365;
+            bool isr = (creationDate.year % 4 == 0 && creationDate.year % 100 != 0) || (creationDate.year % 400 == 0);
+            depositDays -= 365 + isr;
+            depositYears++;
             }
             if(depositDays != 0) balance_fen += balance_fen * annualRate * 0.5;
         }
@@ -127,7 +135,8 @@ void calculate_interest(BankListNode* head)
                 double annualRate = 0.04;
                 balance_fen += balance_fen * annualRate;
             }
-            depositDays -= 365;
+            bool isr = (creationDate.year % 4 == 0 && creationDate.year % 100 != 0) || (creationDate.year % 400 == 0);
+            depositDays -= 365 + isr;
         }
     }
             
