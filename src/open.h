@@ -36,4 +36,4 @@ void printAccount(const Account& acc);
  * @param targetName 目标姓名（当choice=1时有效）
  * @param targetDate 目标日期（当choice=2时有效）
  */
-void queryAccount(BankListNode* head, int choice, const string& targetID,const string& targetName, const Date& targetDate);
+void queryAccount(BankListNode* head);

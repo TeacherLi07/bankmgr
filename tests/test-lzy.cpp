@@ -24,7 +24,7 @@ int main() {
         cout << "5. 从文件加载账户" << endl;
         cout << "0. 退出系统" << endl;
         cout << "==========================================================" << endl;
-        cout << "请选择操作：";
+        cout << "请选择操作: ";
         cin >> mainChoice;
 
         switch (mainChoice) {
@@ -55,7 +55,7 @@ int main() {
             case 4: {
                 // 测试保存文件功能
                 string filepath;
-                cout << "请输入保存文件路径（如：accounts.txt）：";
+                cout << "请输入保存文件路径（如：accounts.txt）: ";
                 cin >> filepath;
                 if (saveToFile(head, filepath)) {
                     cout << "账户信息保存成功！" << endl;
@@ -69,7 +69,7 @@ int main() {
             case 5: {
                 // 测试加载文件功能
                 string filepath;
-                cout << "请输入加载文件路径（如：accounts.txt）：";
+                cout << "请输入加载文件路径（如：accounts.txt）: ";
                 cin >> filepath;
                 if (loadFromFile(head, filepath)) {
                     cout << "账户信息加载成功！" << endl;
