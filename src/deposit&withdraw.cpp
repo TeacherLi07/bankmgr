@@ -10,7 +10,7 @@ BankListNode* find_accountID(BankListNode* head, string accountID_0)
         return nullptr;
     }
     BankListNode* p=head->next;
-    while(p!=nullptr)//检查！
+    while(p!=nullptr)
     {
         if(p->account.accountID==accountID_0)
         {
@@ -53,4 +53,20 @@ bool check_diposit_valid(BankListNode* p_node,long long withdraw)
 void withdrawmoney(BankListNode* p_node,long long withdraw)
 {
     p_node->account.balance-=withdraw;
+}
+
+void show_all_accountIDs(BankListNode* head)
+{
+BankListNode* p=head->next;
+    if(p==nullptr)
+    {
+        std::cout<<"该银行暂无账户信息！"<<'\n';
+        return;
+    }
+    std::cout<<"该银行所有账户ID如下: "<<'\n';
+    while(p!=nullptr)
+    {
+        std::cout<<p->account.accountID<<'\n';
+        p=p->next;
+    }
 }

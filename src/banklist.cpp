@@ -1,4 +1,12 @@
 #include "banklist.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include<iostream> 
+
+// 辅助宏：强制字符串字面量为 UTF-8 编码，并转换为 const char* 以兼容 std::string 和 std::format
+// 解决因 -fexec-charset=GBK 导致的字面量编码与文件内容(UTF-8)不一致的问题
+#define U8(s) reinterpret_cast<const char*>(u8##s)
 
 Date operator++(Date &d, int)
 {
@@ -115,7 +123,7 @@ bool operator==(const Account &a1, const Account &a2)
 
 bool isValid(const Date &d)
 {
-    if (d.year < 1900 || d.month < 1 || d.month > 12 || d.day < 1)
+    if (d.year < 1900 || d.year > 2500 || d.month < 1 || d.month > 12 || d.day < 1)
         return false;
     const int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     bool isr = (d.year % 4 == 0 && d.year % 100 != 0) || (d.year % 400 == 0);
@@ -186,36 +194,20 @@ void editAccount(BankListNode *node, const Account &newAccountData)
         node->account = newAccountData;
 }
 
-string accountToString_old(const Account &account)
-{
-    string str;
-    str += account.accountID + " ";
-    str += account.ownerName + " ";
-    str += (account.gender ? "男" : "女") + string(" ");
-    str += account.password + " ";
-    stringstream ss;
-    ss<<std::fixed<<std::setprecision(2)<<account.balance / 100.0;
-    str += ss.str() + " ";
-    ss.str("");
-    ss<<account.creationDate.year<<std::setw(2)<<std::setfill('0')<<account.creationDate.month<<std::setw(2)<<std::setfill('0')<<account.creationDate.day;
-    str += ss.str() + " ";
-    str += (account.isFixed ? "定期" : "活期");
-    return str;
-}
-
 string accountToString(const Account &account)
 {
     // 使用 std::format 手动添加引号，以便读取时 std::quoted 处理空格
+    // 使用 U8 宏确保输出的中文字符为 UTF-8 编码
     return std::format("\"{}\" \"{}\" {} \"{}\" {:.2f} {}{:02}{:02} {}", 
         account.accountID,
         account.ownerName,
-        (account.gender ? "男" : "女"),
+        (account.gender ? U8("男") : U8("女")),
         account.password,
         account.balance / 100.0, // 自动转为浮点格式化
         account.creationDate.year, 
         account.creationDate.month, 
         account.creationDate.day,
-        (account.isFixed ? "定期" : "活期")
+        (account.isFixed ? U8("定期") : U8("活期"))
     );
 }
 
@@ -234,18 +226,27 @@ Account stringToAccount(const string &str)
              >> dateStr 
              >> typeStr))
     {
+        // std::cout<<"Failed to parse account string: "<<str<<std::endl;
         return Account{};
     }
 
     string extra;
-    if (ss >> extra) return Account{}; 
+    if (ss >> extra)
+    {   
+        // std::cout<<"Extra data found: "<<extra<<std::endl;
+        return Account{}; 
+    }
 
-    if(genderStr == "男")
+    // 比较时使用 U8 宏，确保与读取到的 UTF-8 内容匹配
+    if(genderStr == U8("男"))
         acc.gender = true;
-    else if(genderStr == "女")
+    else if(genderStr == U8("女"))
         acc.gender = false;
     else
+    {
+        // std::cout<<"Invalid gender: "<<genderStr<<std::endl;
         return Account{};
+    }
         
     // 处理余额
     if (balanceStr.length() < 4 || balanceStr[balanceStr.length() - 3] != '.') return Account{};
@@ -253,28 +254,41 @@ Account stringToAccount(const string &str)
     try {
         acc.balance = std::stoll(balanceStr); // 直接转为以分为单位的整数
     } catch (...) {
+        // std::cout<<"Invalid balance: "<<balanceStr<<std::endl;
         return Account{};
     }
 
     // 处理日期
-    if (dateStr.length() != 8) return Account{};
+    if (dateStr.length() != 8)
+    {
+        // std::cout<<"Invalid date length: "<<dateStr<<std::endl;
+        return Account{};
+    }
     try {
         acc.creationDate.year = std::stoi(dateStr.substr(0, 4));
         acc.creationDate.month = std::stoi(dateStr.substr(4, 2));
         acc.creationDate.day = std::stoi(dateStr.substr(6, 2));
     } catch (...) {
+        // std::cout<<"Invalid date: "<<dateStr<<std::endl;
         return Account{};
     }
     if (!isValid(acc.creationDate))
+    {
+        // std::cout<<"Date is not valid: "<<dateStr<<std::endl;
         return Account{};
+    }
 
-    if (typeStr == "定期")
+    if (typeStr == U8("定期"))
         acc.isFixed = true;
-    else if (typeStr == "活期")
+    else if (typeStr == U8("活期"))
         acc.isFixed = false;
-    else return
-        Account{};
+    else
+    {
+        // std::cout<<"Invalid account type: "<<typeStr<<std::endl;
+        return Account{};
+    }
 
+    // std::cout<<"Parsed account ID: "<<acc.accountID<<std::endl;
     return acc;
 }
 
@@ -299,12 +313,42 @@ bool isValidPath(const string &filepath)
     }
 }
 
-bool loadFromFile(BankListNode *head, const string &filepath)
+string getResourcePath(const string& filename) {
+    
+    fs::path currentPath = fs::current_path();
+    
+    // 向上查找 bankdata 目录
+    fs::path p = currentPath;
+    for (int i = 0; i < 5; ++i) { // 最多向上查找5层
+        if (fs::exists(p / "bankdata") && fs::is_directory(p / "bankdata")) {
+            return (p / "bankdata" / filename).string();
+        }
+        if (p.has_parent_path()) {
+            p = p.parent_path();
+        } else {
+            break;
+        }
+    }
+
+    // 如果找不到 bankdata 目录，默认拼接在当前目录下的 bankdata
+    return (currentPath / "bankdata" / filename).string();
+}
+
+bool loadFromFile(BankListNode *head, const string &filename)
 {
-    if(!isValidPath(filepath))
+    // 强制设置控制台输入输出代码页为 UTF-8 (65001)
+    // 确保 std::cout 能正确打印 UTF-8 字符而不乱码
+    #ifdef _WIN32
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
+    #endif
+
+    string standardPath = getResourcePath(filename);
+
+    if(!isValidPath(standardPath))
         return false;
 
-    ifstream infile(filepath);
+    ifstream infile(standardPath);
     if (!infile.is_open())
         return false;
 
@@ -313,10 +357,12 @@ bool loadFromFile(BankListNode *head, const string &filepath)
     string line;
     while (std::getline(infile, line))
     {
+        // std::cout<<"Loading line: "<<line;
         auto account = stringToAccount(line);
         if(account == Account{})
         {
             status = false; 
+            // std::cout<<" ... Failed (invalid format)\n";
             continue;
         }
         auto *newNode = new BankListNode;
@@ -324,18 +370,19 @@ bool loadFromFile(BankListNode *head, const string &filepath)
         newNode->next = nullptr;
         current->next = newNode;
         current = newNode;
+        // std::cout<<" ... Success\n";
     }
     return status;
 }
 
-bool saveToFile(BankListNode *head, const string &filepath)
+bool saveToFile(BankListNode *head, const string &filename)
 {
-    ifstream in (filepath);
-    return true;
-    if(!isValidPath(filepath))
+    string fullPath = getResourcePath(filename);
+
+    if(!isValidPath(fullPath))
         return false;
 
-    ofstream outfile(filepath);
+    ofstream outfile(fullPath);
     if (!outfile.is_open())
         return false;
     
