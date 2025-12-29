@@ -11,7 +11,7 @@ void calculate_interest(BankListNode* head)
     // 循环直到输入0退出或计算成功
     while(true)
     {
-        cout << "请输入要计算利息的账户ID(输入0退出):";
+        cout << "请输入要计算利息的账户ID(输入0退出): ";
         getline(cin, accountID_input);
         
         // 检查是否要退出
@@ -34,7 +34,7 @@ void calculate_interest(BankListNode* head)
         string password_input;
         while(true)
         {
-            cout << "请输入账户密码(输入0退出):";
+            cout << "请输入账户密码(输入0退出): ";
             getline(cin, password_input);
             
             if(password_input == "0")
@@ -151,19 +151,20 @@ void calculate_interest(BankListNode* head)
             }
         interest = balance_fen - target_account->account.balance;
         // 输出结果
-        cout << "\n========== 利息计算结果 ==========\n";
-        cout << "账户ID：" << target_account->account.accountID << "\n";
-        cout << "账户姓名：" << target_account->account.ownerName << "\n";
-        cout << "存款本金：" << target_account->account.balance/100 << " 元\n";
-        cout << "开户日期：" << creationDate.year << "-" 
+        cout << "\n--------- 利息计算结果 ----------\n";
+        cout << "账户ID: " << target_account->account.accountID << "\n";
+        cout << "账户姓名: " << target_account->account.ownerName << "\n";
+        cout << "存款本金: " << target_account->account.balance/100 << " 元\n";
+        cout << "开户日期: " << creationDate.year << "-" 
              << creationDate.month << "-" << creationDate.day << "\n";
-        cout << "到期日期：" << maturityDate.year << "-" 
+        cout << "到期日期: " << maturityDate.year << "-" 
              << maturityDate.month << "-" << maturityDate.day << "\n";
-        cout << "存款天数：" << depositDays1 << " 天\n";
-        cout << "存款年限：" << depositYears << " 年\n";
-        cout << "应得利息：" << interest/100 << " 元\n";
-        cout << "本息合计：" << balance_fen/100 << " 元\n";
-        cout << "=================================\n\n";
+        cout << "存款天数: " << depositDays1 << " 天\n";
+        cout << "存款年限: " << depositYears << " 年\n";
+        cout << "应得利息: " << interest/100 
+        << " 元\n";
+        cout << "本息合计: " << balance_fen/100 << " 元\n";
+        cout << "----------------------------------\n\n";
         return;
     }
 }

@@ -63,7 +63,7 @@ BankListNode* p=head->next;
         std::cout<<"该银行暂无账户信息！"<<'\n';
         return;
     }
-    std::cout<<"该银行所有账户ID如下："<<'\n';
+    std::cout<<"该银行所有账户ID如下: "<<'\n';
     while(p!=nullptr)
     {
         std::cout<<p->account.accountID<<'\n';

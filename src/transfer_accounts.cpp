@@ -53,6 +53,12 @@ void transfer_accounts(BankListNode* head,char choice_bank){
         while (1) {
             cout << "请输入收款方的账户所在的银行代码(a,b,c,d,e)(输入0退出): ";
             cin >> target_bank;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cout << "输入错误，请重新输入！\n";
+                continue;
+            }
             target_bank = tolower(target_bank);
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             
@@ -111,6 +117,12 @@ void transfer_accounts(BankListNode* head,char choice_bank){
                 while (1) {
                     cout << "请输入转账金额(元)(输入0退出): ";
                     cin >> money;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        cout << "输入错误，请重新输入！\n";
+                        continue;
+                    }
                     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     
                     if (money == 0) {

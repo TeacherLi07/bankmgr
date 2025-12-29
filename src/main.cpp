@@ -8,6 +8,7 @@
 #include"transfer_accounts.h"
 #include "Sort.h"
 #include "RecorrectKey.h"
+#include "open.h"
 using std::cout;
 using std::cin;
 using std::getline;
@@ -57,66 +58,47 @@ int main(int argc, char **argv)
                 {
                     cout<<"部分账户加载失败，可能是文件格式错误或文件不存在，请检查文件"<<filename<<"的完整性。\n";
                 }
-            //手动载入信息给head供测试用
-            // Account acc1;
-            // acc1.accountID="1001";
-            // acc1.ownerName="张三";
-            // acc1.gender=true;
-            // acc1.password="pass123";
-            // acc1.balance=500000; // 5000.00元
-            // acc1.creationDate={2022,5,20};
-            // acc1.isFixed=false;
-            // appendAccount(head,acc1);
-            // Account acc2;
-            // acc2.accountID="1002";
-            // acc2.ownerName="李四";
-            // acc2.gender=false;
-            // acc2.password="word456";
-            // acc2.balance=1000000; // 10000.00元
-            // acc2.creationDate={2021,8,15};
-            // acc2.isFixed=true;
-            // appendAccount(head,acc2);
-            // Account acc3;
-            // acc3.accountID="1003";
-            // acc3.ownerName="王五";
-            // acc3.gender=true;
-            // acc3.password="abc789";
-            // acc3.balance=750000; // 7500.00元
-            // acc3.creationDate={2023,1,10};
-            // acc3.isFixed=false;
-            // appendAccount(head,acc3);
+            cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
             // print_whole_account(head);
-            // cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
-            print_whole_account(head);
             bool flag=1;
             while(flag)
             {
                 printf("请输入你要进行的操作的代号：\nA.查询\nB.开户\nC.销户\nD.修改账户密码\nE.账户排序\nF.存款\nG.取款\nH.转账\nI.计算利息\nJ.退出该银行\n");
                 char choice_operation;
+
                 cin>>choice_operation;
                 choice_operation=toupper(choice_operation);
+                if(cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    printf("输入错误，请重新输入！\n");
+                    continue;
+                }
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 switch(choice_operation)
                 {
                     case 'A':
                     {
-                        
+                        queryAccount(head);
                     }
                     break;
                     case 'B':
                     {
-
+                        openAccount(head);
+                        saveToFile(head,filename);
                     }
                     break;
                     case 'C':
                     {
-
+                        cancelaccount(head);
+                        saveToFile(head,filename);
                     }
                     break;
                     case 'D':
                     {
                         RecorrectKey(head);
-                        // saveToFile(head,filename);
+                        saveToFile(head,filename);
                     }
                     break;
                     case 'E':
@@ -128,7 +110,6 @@ int main(int argc, char **argv)
                     {
                         while(1)
                         {
-                            show_all_accountIDs(head);
                             printf("请输入你要查询账户的编号:（输入0以退出）");//增加输出所有账户ID的功能，并提示用户输入0返回上一级菜单
                             string temp_account;
                             getline(cin,temp_account);
@@ -141,20 +122,28 @@ int main(int argc, char **argv)
                             {
                                 while(1)
                                 {
-                                    printf("请输入该账户的密码:");
+                                    printf("请输入该账户的密码: ");
                                     string temp_password;
                                     getline(cin,temp_password);
                                     if(password_correct(ptarget_account,temp_password))
                                     {
                                         printf("密码正确！\n");
-                                        while(1)
+                                        bool flag_deposit=1;
+                                        while(flag_deposit)
                                         {
                                             printf("当前账户余额为: %.2f元\n",ptarget_account->account.balance/100.0);
-                                            printf("请输入存款金额:");//增加显示当前金额的功能
+                                            printf("请输入存款金额: ");//增加显示当前金额的功能
                                             double cin_money;
                                             cin>>cin_money;
+                                            if(cin.fail())
+                                            {
+                                                cin.clear();
+                                                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                                printf("输入错误，请重新输入！\n");
+                                                continue;
+                                            }
                                             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                                            long long deposit_balance=(long long) cin_money*100;
+                                            long long deposit_balance=(long long) (cin_money*100);
                                             if(deposit_balance<=0)
                                             {
                                                 printf("请输入正确的存款金额（输入0退出）\n");
@@ -164,6 +153,8 @@ int main(int argc, char **argv)
                                                 depositmoney(ptarget_account,deposit_balance);
                                                 printf("存款成功！\n");
                                                 printf("存款后账户余额为: %.2f元\n",ptarget_account->account.balance/100.0);
+                                                cout << "------------------------" << endl;
+                                                flag_deposit=0;
                                                 break;
                                             }
                                         }
@@ -181,14 +172,14 @@ int main(int argc, char **argv)
                                 printf("请输入正确的账户编号\n");
                             }
                         }
-                        // saveToFile(head,filename);
+                        cout<<"存款操作已完成，正在保存数据...\n";
+                        saveToFile(head,filename);
                     }
                     break;
                     case 'G':
                     {
                         while(1)
                         {
-                            show_all_accountIDs(head);
                             printf("请输入你要查询账户的编号:（输入0以退出）");//增加输出所有账户ID的功能，并提示用户输入0返回上一级菜单
                             string temp_account;
                             getline(cin,temp_account);
@@ -201,20 +192,21 @@ int main(int argc, char **argv)
                             {
                                 while(1)
                                 {
-                                    printf("请输入该账户的密码:");
+                                    printf("请输入该账户的密码: ");
                                     string temp_password;
                                     getline(cin,temp_password);
                                     if(password_correct(ptarget_account,temp_password))
                                     {
                                         printf("密码正确！\n");
-                                        while(1)
+                                        bool flag_withdraw=1;
+                                        while(flag_withdraw)
                                         {
                                             printf("当前账户余额为: %.2f元\n",ptarget_account->account.balance/100.0);
-                                            printf("请输入取款金额:");//增加显示当前金额的功能
+                                            printf("请输入取款金额: ");//增加显示当前金额的功能
                                             double cin_money;
                                             cin>>cin_money;
                                             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                                            long long withdraw_balance=(long long) cin_money*100;
+                                            long long withdraw_balance=(long long) (cin_money*100);
                                             if(withdraw_balance<=0)
                                             {
                                                 printf("请输入正确的取款金额（输入0退出）\n");
@@ -228,6 +220,8 @@ int main(int argc, char **argv)
                                                 withdrawmoney(ptarget_account,withdraw_balance);
                                                 printf("取款成功！\n");
                                                 printf("取款后账户余额为: %.2f元\n",ptarget_account->account.balance/100.0);
+                                                cout << "------------------------" << endl;
+                                                flag_withdraw=0;
                                                 break;
                                             }
                                         }
@@ -245,19 +239,19 @@ int main(int argc, char **argv)
                                 printf("请输入正确的账户编号\n");
                             }
                         }
-                        // saveToFile(head,filename);
+                        saveToFile(head,filename);
                     }
                     break;
                     case 'H':
                     {
                         transfer_accounts(head,choice_bank);//并未存入数据
-                        // saveToFile(head,filename);
+                        saveToFile(head,filename);
                     }
                     break;
                     case 'I':
                     {
                         calculate_interest(head);
-                        // saveToFile(head,filename);
+                        saveToFile(head,filename);
                     }
                     break;
 
@@ -266,14 +260,15 @@ int main(int argc, char **argv)
                     break;
 
                     default:
-                    printf("别闹！输入正确的代号！");
+                    printf("输入正确的代号！");
                     break;
                 }
             }
         }
         else
         {
-            printf("你这个家伙，请输入正确的银行编号！！\n");
+            printf("请输入正确的银行编号！！\n");
+            cin.clear();
             continue;
         }
     }
