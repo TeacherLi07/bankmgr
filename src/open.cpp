@@ -1,6 +1,7 @@
 #pragma once
 #include "open.h"
 #include <iostream>
+#include <iomanip>
 using std::cin, std::cout, std::endl;
 
 //输入新的账户,bool型判断是否成功开户
@@ -175,7 +176,7 @@ void print_whole_account(const Account& acc)
     cout << "账户ID:" << acc.accountID << '\n';
     cout << "账户姓名:" << acc.ownerName << '\n';
     cout << "账户性别:" << (acc.gender ? "男" : "女") << '\n';
-    cout << "账户余额:" << acc.balance / 100.0 << " 元" << '\n';
+    cout << "账户余额:" << std::fixed << std::setprecision(2) << acc.balance / 100.0 << " 元" << '\n';
     cout << "账户创建日期:" << acc.creationDate.year << "-" << acc.creationDate.month << "-" << acc.creationDate.day << '\n';
     cout << "账户类型:" << (acc.isFixed ? "定期" : "活期") << '\n';
 }

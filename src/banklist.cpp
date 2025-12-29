@@ -2,6 +2,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
+#include<iostream> 
 
 // 辅助宏：强制字符串字面量为 UTF-8 编码，并转换为 const char* 以兼容 std::string 和 std::format
 // 解决因 -fexec-charset=GBK 导致的字面量编码与文件内容(UTF-8)不一致的问题
@@ -122,7 +123,7 @@ bool operator==(const Account &a1, const Account &a2)
 
 bool isValid(const Date &d)
 {
-    if (d.year < 1900 || d.month < 1 || d.month > 12 || d.day < 1)
+    if (d.year < 1900 || d.year > 2500 || d.month < 1 || d.month > 12 || d.day < 1)
         return false;
     const int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     bool isr = (d.year % 4 == 0 && d.year % 100 != 0) || (d.year % 400 == 0);
@@ -225,14 +226,14 @@ Account stringToAccount(const string &str)
              >> dateStr 
              >> typeStr))
     {
-        // std::cout<<"Failed to parse account string: "<<str<<std::endl;
+        std::cout<<"Failed to parse account string: "<<str<<std::endl;
         return Account{};
     }
 
     string extra;
     if (ss >> extra)
     {   
-        // std::cout<<"Extra data found: "<<extra<<std::endl;
+        std::cout<<"Extra data found: "<<extra<<std::endl;
         return Account{}; 
     }
 
@@ -243,7 +244,7 @@ Account stringToAccount(const string &str)
         acc.gender = false;
     else
     {
-        // std::cout<<"Invalid gender: "<<genderStr<<std::endl;
+        std::cout<<"Invalid gender: "<<genderStr<<std::endl;
         return Account{};
     }
         
@@ -253,14 +254,14 @@ Account stringToAccount(const string &str)
     try {
         acc.balance = std::stoll(balanceStr); // 直接转为以分为单位的整数
     } catch (...) {
-        // std::cout<<"Invalid balance: "<<balanceStr<<std::endl;
+        std::cout<<"Invalid balance: "<<balanceStr<<std::endl;
         return Account{};
     }
 
     // 处理日期
     if (dateStr.length() != 8)
     {
-        // std::cout<<"Invalid date length: "<<dateStr<<std::endl;
+        std::cout<<"Invalid date length: "<<dateStr<<std::endl;
         return Account{};
     }
     try {
@@ -268,12 +269,12 @@ Account stringToAccount(const string &str)
         acc.creationDate.month = std::stoi(dateStr.substr(4, 2));
         acc.creationDate.day = std::stoi(dateStr.substr(6, 2));
     } catch (...) {
-        // std::cout<<"Invalid date: "<<dateStr<<std::endl;
+        std::cout<<"Invalid date: "<<dateStr<<std::endl;
         return Account{};
     }
     if (!isValid(acc.creationDate))
     {
-        // std::cout<<"Date is not valid: "<<dateStr<<std::endl;
+        std::cout<<"Date is not valid: "<<dateStr<<std::endl;
         return Account{};
     }
 
@@ -283,11 +284,11 @@ Account stringToAccount(const string &str)
         acc.isFixed = false;
     else
     {
-        // std::cout<<"Invalid account type: "<<typeStr<<std::endl;
+        std::cout<<"Invalid account type: "<<typeStr<<std::endl;
         return Account{};
     }
 
-    // std::cout<<"Parsed account ID: "<<acc.accountID<<std::endl;
+    std::cout<<"Parsed account ID: "<<acc.accountID<<std::endl;
     return acc;
 }
 
@@ -356,12 +357,12 @@ bool loadFromFile(BankListNode *head, const string &filename)
     string line;
     while (std::getline(infile, line))
     {
-        // std::cout<<"Loading line: "<<line;
+        std::cout<<"Loading line: "<<line;
         auto account = stringToAccount(line);
         if(account == Account{})
         {
             status = false; 
-            // std::cout<<" ... Failed (invalid format)\n";
+            std::cout<<" ... Failed (invalid format)\n";
             continue;
         }
         auto *newNode = new BankListNode;
@@ -369,7 +370,7 @@ bool loadFromFile(BankListNode *head, const string &filename)
         newNode->next = nullptr;
         current->next = newNode;
         current = newNode;
-        // std::cout<<" ... Success\n";
+        std::cout<<" ... Success\n";
     }
     return status;
 }

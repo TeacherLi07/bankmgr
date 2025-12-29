@@ -105,12 +105,17 @@ void Sort(BankListNode *head)
 void print_whole_account(BankListNode* head)
 {
     BankListNode* p=head->next;
+    if(p==nullptr)
+    {
+        cout<<"当前银行无任何账户信息！"<<endl;
+        return;
+    }
     while(p!=nullptr)
     {
         cout<<"账户ID:"<<p->account.accountID<<'\n';
         cout<<"账户姓名:"<<p->account.ownerName<<'\n';
         cout<<"账户性别:"<< (p->account.gender ? "男" : "女")<<'\n';
-        cout<<"账户余额:"<<p->account.balance/100.0<<'\n';      
+        cout<<"账户余额:"<< std::fixed << std::setprecision(2) << p->account.balance/100.0<<'\n';      
         cout<<"账户创建日期:"<<p->account.creationDate.year<<"-"<<p->account.creationDate.month<<"-"<<p->account.creationDate.day<<'\n';
         cout<<"账户类型:"<<(p->account.isFixed ? "定期" : "活期")<<'\n';
         cout<<"---------------------------"<<'\n';
