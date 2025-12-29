@@ -42,6 +42,12 @@ void calculate_interest(BankListNode* head)
                 cout << "退出利息计算\n";
                 return;
             }
+            for(int i = 0; i < password_input.length(); i++) {
+                if(password_input[i] == ' ') {
+                    cout << "密码不能包含空格，请重新输入！\n";
+                    continue;
+                }
+            }
             
             if(password_correct(target_account, password_input))
             {
