@@ -157,22 +157,22 @@ void transfer_accounts(BankListNode* head,char choice_bank){
                             if (target_account) {
                                 target_account->account.balance += money_in_cents;
                                 // 保存到文件
-                                saveToFile(head, std::format("bankdata\\{}.txt", choice_bank));
+                                saveToFile(head, std::format("{}.txt", choice_bank));
                             }
                         } else {
                             // 不同银行，需要加载目标银行文件，修改后保存
                             BankListNode* target_head = createList();
-                            loadFromFile(target_head, std::format("bankdata\\{}.txt", target_bank));
+                            loadFromFile(target_head, std::format("{}.txt", target_bank));
                             BankListNode* target_acc = find_accountID(target_head, target_accountID);
                             if (target_acc) {
                                 target_acc->account.balance += money_in_cents;
                                 // 保存目标银行文件
-                                saveToFile(target_head, std::format("bankdata\\{}.txt", target_bank));
+                                saveToFile(target_head, std::format("{}.txt", target_bank));
                             }
                             
                             
                             // 保存转账方银行文件
-                            saveToFile(head, std::format("bankdata\\{}.txt", choice_bank));
+                            saveToFile(head, std::format("{}.txt", choice_bank));
                         }
                         
                         // 输出转账成功信息
