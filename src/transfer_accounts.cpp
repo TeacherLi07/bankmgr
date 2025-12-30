@@ -1,6 +1,7 @@
 #include"transfer_accounts.h"
 #include"deposit&withdraw.h"
 #include<iostream>
+#include"input.h"
 using std::cin,std::cout,std::getline;
 
 void transfer_accounts(BankListNode* head,char choice_bank){
@@ -52,16 +53,8 @@ void transfer_accounts(BankListNode* head,char choice_bank){
         char target_bank;
         while (1) {
             cout << "请输入收款方的账户所在的银行代码(a,b,c,d,e)(输入0退出): ";
-            cin >> target_bank;
-            if (cin.fail()) {
-                cin.clear();
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                cout << "输入错误，请重新输入！\n";
-                continue;
-            }
-            target_bank = tolower(target_bank);
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            
+            inputchoice(target_bank);
+            target_bank = tolower(target_bank);            
             if (target_bank == '0') {
                 cout << "退出转账\n";
                 return;
