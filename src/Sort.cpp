@@ -1,4 +1,6 @@
 #include"Sort.h"
+#include"input.h"
+#include<iostream>
 BankListNode* SortByName(BankListNode *head)
 {
     if (head->next==nullptr)return nullptr;//如果是空，直接返回
@@ -16,6 +18,7 @@ BankListNode* SortByName(BankListNode *head)
     return head;
 }
 //姓名排序实现函数
+
 BankListNode* SortByMoney(BankListNode *head)
 {
     if (head->next==nullptr)return nullptr;//如果是空，直接返回
@@ -70,35 +73,35 @@ BankListNode* SortByDate(BankListNode *head)
 void Sort(BankListNode *head)
 {
     cout<<"欢迎使用排序功能(输入1为账户排序,2为开户人姓名排序,3为金额排序,4为开户日期排序,0为退出排序功能):\n";
-    string choice;
-    cin>>choice;
-    if (choice!="0")
+    char choice;
+    inputchoice(choice);
+    if (choice != '0')
     {
-        while (choice!="1"&&choice!="2"&&choice!="3"&&choice!="4")
-    {
-        cout<<"没有这个选项,请重新输入:\n";
-        cin>>choice;
-    }
-    if (choice=="1")
-    {
-        SortByAccount(head);
-        print_whole_account(head);
-    }
-    else if (choice=="2")
-    {
-        SortByName(head);
-        print_whole_account(head);
-    }
-    else if (choice=="3")
-    {
-        SortByMoney(head);
-        print_whole_account(head);
-    }
-    else
-    {
-        SortByDate(head);
-        print_whole_account(head);
-    }
+        while (choice != '1' && choice != '2' && choice != '3' && choice != '4')
+        {
+            cout << "没有这个选项,请重新输入:\n";
+            inputchoice(choice);
+        }
+        if (choice == '1')
+        {
+            SortByAccount(head);
+            print_whole_account(head);
+        }
+        else if (choice == '2')
+        {
+            SortByName(head);
+            print_whole_account(head);
+        }
+        else if (choice == '3')
+        {
+            SortByMoney(head);
+            print_whole_account(head);
+        }
+        else
+        {
+            SortByDate(head);
+            print_whole_account(head);
+        }
     }
 }
 //排序逻辑实现函数

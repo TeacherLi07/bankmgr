@@ -9,6 +9,7 @@
 #include "Sort.h"
 #include "RecorrectKey.h"
 #include "open.h"
+#include "input.h"
 using std::cout;
 using std::cin;
 using std::getline;
@@ -23,9 +24,8 @@ int main(int argc, char **argv)
     {  
         cout<<"请选择你需要操作的账户所在的银行代码:a,b,c,d,e\n若想要退出请输入0\n";
         char choice_bank;
-        cin>>choice_bank;
+        inputchoice(choice_bank);
         choice_bank=tolower(choice_bank);
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if(choice_bank=='0')
         {
             break;
@@ -59,23 +59,13 @@ int main(int argc, char **argv)
                     cout<<"部分账户加载失败，可能是文件格式错误或文件不存在，请检查文件"<<filename<<"的完整性。\n";
                 }
             cout<<"成功进入银行"<<choice_bank<<"的账户管理系统！\n";
-            // print_whole_account(head);
             bool flag=1;
             while(flag)
             {
                 printf("请输入你要进行的操作的代号：\nA.查询\nB.开户\nC.销户\nD.修改账户密码\nE.账户排序\nF.存款\nG.取款\nH.转账\nI.计算利息\nJ.退出该银行\n");
                 char choice_operation;
-
-                cin>>choice_operation;
+                inputchoice(choice_operation);
                 choice_operation=toupper(choice_operation);
-                if(cin.fail())
-                {
-                    cin.clear();
-                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    printf("输入错误，请重新输入！\n");
-                    continue;
-                }
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 switch(choice_operation)
                 {
                     case 'A':
