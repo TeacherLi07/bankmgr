@@ -1,31 +1,56 @@
 #include <iostream>
 #include <windows.h>
-#include "banklist.h"
-#include "deposit&withdraw.h"
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <iomanip>
+
 using std::cin, std::cout, std::endl;
+
+// 复制 Sort.h 中的逻辑进行调试
+std::wstring toWString(const std::string& str) {
+    if (str.empty()) return L"";
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+    std::wstring wstrTo(size_needed, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+    return wstrTo;
+}
+
+void test_compare_with_lcid(const std::string& name1, const std::string& name2, DWORD lcid, const std::string& desc) {
+    std::wstring s1 = toWString(name1);
+    std::wstring s2 = toWString(name2);
+    
+    int result = CompareStringW(lcid, 0, s1.c_str(), -1, s2.c_str(), -1);
+    
+    cout << "Comparing " << name1 << " and " << name2 << " with " << desc << " (0x" << std::hex << lcid << std::dec << "): ";
+    if (result == CSTR_LESS_THAN) cout << "LESS";
+    else if (result == CSTR_EQUAL) cout << "EQUAL";
+    else if (result == CSTR_GREATER_THAN) cout << "GREATER";
+    else cout << "ERROR " << GetLastError();
+    cout << endl;
+}
 
 int main()
 {
-    SetConsoleOutputCP(936); 
-    SetConsoleCP(936);
-    cout<<"\nHello, this is lxh's test file.\n"<<endl;
-    BankListNode *list = createList();
-    Account acc1 = {"LXH001", "LXH", true, "password123", 100000, {2024, 1, 1}, false};
-    Account acc2 = {"ABC002", "Alice", false, "alicepwd", 250000, {2023, 5, 15}, true};
-    appendAccount(list, acc1);
-    appendAccount(list, acc2);
-    saveToFile(list, "test_accounts.txt");
-    auto *newList = createList();
-    loadFromFile(newList, "test_accounts.txt");
-    auto *current = newList->next;
-    while (current != nullptr)
-    {
-        cout << "Account ID: " << current->account.accountID << ", Owner: " << current->account.ownerName
-             << ", Balance: " << current->account.balance / 100.0 << ", Created on: "
-             << current->account.creationDate.year << "-" << std::setw(2) << std::setfill('0') << current->account.creationDate.month
-             << "-" << std::setw(2) << std::setfill('0') << current->account.creationDate.day
-             << ", Type: " << (current->account.isFixed ? "Fixed" : "Savings") << endl;
-        current = current->next;
-    }
+    SetConsoleOutputCP(65001); 
+    SetConsoleCP(65001);
+    
+    cout << "Debug Sorting..." << endl;
+    
+    // Pinyin order: Chen (陈) < Wang (王) < Xiao (小)
+    // So:
+    // Chen < Xiao -> LESS
+    // Xiao > Wang -> GREATER
+    
+    test_compare_with_lcid("陈思", "小灰灰", 0x0804, "Default zh-CN");
+    test_compare_with_lcid("陈思", "小灰灰", 0x00020804, "Pinyin");
+    test_compare_with_lcid("陈思", "小灰灰", 0x00030804, "Stroke");
+    
+    cout << "----------------" << endl;
+    
+    test_compare_with_lcid("小灰灰", "王芳", 0x0804, "Default zh-CN");
+    test_compare_with_lcid("小灰灰", "王芳", 0x00020804, "Pinyin");
+    test_compare_with_lcid("小灰灰", "王芳", 0x00030804, "Stroke");
+
     return 0;
 }

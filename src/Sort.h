@@ -3,6 +3,10 @@
 #include<set>
 #include<iomanip>
 #include"banklist.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 using std::cin,std::cout,std::endl,std::multiset;
 BankListNode* SortByName(BankListNode *head);
 
@@ -29,8 +33,34 @@ BankListNode* SortByAccount(BankListNode *head);
  */
 struct NameCmp{
     bool operator()(const Account &a, const Account &b) const{
+#ifdef _WIN32
+        // 转换 UTF-8 到 wstring 以使用 Windows API
+        auto toWString = [](const std::string& str) -> std::wstring {
+            if (str.empty()) return L"";
+            int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+            std::wstring wstrTo(size_needed, 0);
+            MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+            return wstrTo;
+        };
+
+        std::wstring s1 = toWString(a.ownerName);
+        std::wstring s2 = toWString(b.ownerName);
+
+        // 使用 Windows API 进行拼音排序
+        // LOCALE_ZH_CN (0x0804) 的默认排序 (SORT_DEFAULT) 即为拼音排序
+        // 注意：SORT_CHINESE_PRC (0x2) 实际上是笔画排序，不要使用它！
+        DWORD localeId = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_DEFAULT);
+        int result = CompareStringW(localeId, 0, s1.c_str(), -1, s2.c_str(), -1);
+
+        if (result == CSTR_EQUAL) {
+            return a.accountID < b.accountID;
+        }
+        return result == CSTR_LESS_THAN;
+#else
+        // 非 Windows 平台回退到默认字符串比较
         if (a.ownerName==b.ownerName)return a.accountID<b.accountID;
         return a.ownerName < b.ownerName;
+#endif
     }
 };
 
