@@ -14,6 +14,13 @@ if is_plat("windows", "mingw") then
     add_cxflags("-finput-charset=UTF-8", "-fexec-charset=UTF-8")
 end
 
+if is_mode("release") then
+    add_ldflags("-static", {force = true})
+    set_symbols("hidden")       -- 隐藏符号
+    set_optimize("faster")    -- 优化体积 (对应 -Os)
+    set_strip("all")            -- 移除调试信息和符号表，极大减小体积
+end
+
 target("bankmgr")
     set_kind("binary")
     add_files("src/*.cpp")
