@@ -40,3 +40,15 @@ void inputdate(Date &date);
  * @param isFixed 输入的账户类型，0为活期，1为定期
  */
 void inputAccountType(int &isFixed);
+
+/**
+ * @brief 输入姓名（允许包含空格等字符）
+ * @param name 输入的姓名字符串
+ */
+void inputName(string &name);
+
+/**
+ * @brief 输入密码（允许包含字符，但不允许包含空格）
+ * @param password 输入的密码字符串
+ */
+void inputpassword(string &password);

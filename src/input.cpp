@@ -32,6 +32,11 @@ void inputAccountID(string &accountID)
         bool flag_input = true;
         string temp_input;
         getline(cin, temp_input);
+        if(temp_input.empty())
+        {
+            cout << "输入错误，请重新输入！\n";
+            continue;
+        }
         for (int i = 0; i < temp_input.size(); i++)
         {
             if (temp_input[i] < '0' || temp_input[i] > '9')
@@ -48,6 +53,42 @@ void inputAccountID(string &accountID)
         else
         {
             accountID = temp_input;
+            return;
+        }
+    }
+}
+void inputName(string &name)
+{
+    while (true)
+    {
+        string temp_input;
+        getline(cin, temp_input);
+        if (temp_input.empty())
+        {
+            cout << "输入错误，请重新输入！\n";
+            continue;
+        }
+        else
+        {
+            name = temp_input;
+            return;
+        }
+    }
+}
+void inputpassword(string &password)
+{
+    while (true)
+    {
+        string temp_input;
+        getline(cin, temp_input);
+        if (temp_input.empty())
+        {
+            cout << "输入错误，请重新输入！\n";
+            continue;
+        }
+        else
+        {
+            password = temp_input;
             return;
         }
     }

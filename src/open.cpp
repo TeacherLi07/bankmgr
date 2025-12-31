@@ -27,7 +27,7 @@ void openAccount(BankListNode* head) {
     }
     //输入后续选项
     cout << "请输入开户人姓名（输入0退出当前操作）: ";
-    getline(cin, newaccount.ownerName);
+    inputName(newaccount.ownerName);
     
     // 输入0退出当前操作
     if (newaccount.ownerName == "0") {
@@ -54,8 +54,8 @@ void openAccount(BankListNode* head) {
     }
 
     cout << "请输入密码（输入0退出当前操作）: ";
-    getline(cin, newaccount.password);
     
+    inputpassword(newaccount.password);
     // 输入0退出当前操作
     if (newaccount.password == "0") {
         return; // 直接返回，退出函数
@@ -128,28 +128,28 @@ void cancelaccount(BankListNode* head) {
         return;
     }
     cout << "请输入要注销的账户ID（输入0退出当前操作）: ";
-    string inputpassword, inputaccountID;
-    getline(cin, inputaccountID);
+    string input_password, input_accountID;
+    inputpassword(input_accountID);
     
     // 输入0退出当前操作
-    if (inputaccountID == "0") {
+    if (input_accountID == "0") {
         cout << "您选择退出当前操作..." << endl;
         return; // 直接返回，退出函数
     }
 
     cout << "请输入账户密码（输入0退出当前操作）: ";
-    getline(cin, inputpassword);
+    inputpassword(input_password);
     
     // 输入0退出当前操作
-    if (inputpassword == "0") {
+    if (input_password == "0") {
         cout << "您选择退出当前操作..." << endl;
         return; // 直接返回，退出函数
     }
 
     BankListNode* p = head->next;
     while (p != NULL) {
-        if (p->account.accountID == inputaccountID) {
-            if (p->account.password == inputpassword) {
+        if (p->account.accountID == input_accountID) {
+            if (p->account.password == input_password) {
                 p->account.balance = 0;
                 deleteAccount(head, p);
                 cout << "销户成功，账户已删除。" << endl;
@@ -205,7 +205,7 @@ void queryAccount(BankListNode* head)
     case 1: { // 按账号查询
         string targetID;
         cout << "请输入要查询的账号（输入0退出当前操作）: ";
-        getline(cin, targetID);
+        inputAccountID(targetID);
         
         // 输入0退出当前操作
         if (targetID == "0") {
@@ -228,7 +228,7 @@ void queryAccount(BankListNode* head)
     case 2: { // 按姓名查询
         string targetName;
         cout << "请输入要查询的姓名（输入0退出当前操作）: ";
-        getline(cin, targetName);
+        inputName(targetName);
         
         // 输入0退出当前操作
         if (targetName == "0") {

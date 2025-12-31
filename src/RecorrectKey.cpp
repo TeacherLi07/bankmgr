@@ -1,4 +1,5 @@
 #include "RecorrectKey.h"
+#include "input.h"
 // 判断密码正确函数
 bool password_is_correct(BankListNode *target_Account, string Orginalpassword)
 {
@@ -40,7 +41,7 @@ void RecorrectKey(BankListNode *head)
                     {
                         cout << "请输入你要修改的密码:(输入0以退出)" << endl;
                         string RecorrectPassword;
-                        getline(cin, RecorrectPassword);
+                        inputpassword(RecorrectPassword);
                         if(RecorrectPassword=="0")
                         {
                             printf("密码修改已取消！\n");
