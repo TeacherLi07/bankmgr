@@ -1,7 +1,7 @@
 #include <iostream>
 #include "open.h"
 #include "banklist.h"
-#include <windows.h>0
+#include <windows.h>
 using std::cin, std::cout, std::endl;
 
 
@@ -43,11 +43,8 @@ int main() {
             }
 
             case 3:{
-                // 测试查询功能（修正原函数冗余参数问题）
-                int dummyChoice = 0;
-                string dummyID="", dummyName="";
-                Date dummyDate;
-                queryAccount(head, dummyChoice, dummyID, dummyName, dummyDate);
+                // 测试查询功能
+                queryAccount(head);
                 cout << "----------------------------------------------------------" << endl;
                 break;
             }
