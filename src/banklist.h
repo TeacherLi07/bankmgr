@@ -142,7 +142,7 @@ bool isValidFilepath(const string &filepath);
  * @param filename 银行数据文件名
  * @return 返回标准化的文件路径字符串
  */
-string getResourcePath(const string& filename);
+fs::path getResourcePath(const string& filename);
 
 /**
  * @brief 从文件加载账户信息到链表

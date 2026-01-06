@@ -313,15 +313,20 @@ bool isValidPath(const string &filepath)
     }
 }
 
-string getResourcePath(const string& filename) {
+// 修改返回类型为 fs::path
+fs::path getResourcePath(const string& filename) {
     
     fs::path currentPath = fs::current_path();
     
+    // 关键修复：将 UTF-8 的 std::string 转换为 fs::path
+    // C++20 标准做法：视为 char8_t 序列
+    fs::path filenamePath = fs::path(reinterpret_cast<const char8_t*>(filename.c_str()));
+
     // 向上查找 bankdata 目录
     fs::path p = currentPath;
-    for (int i = 0; i < 5; ++i) { // 最多向上查找5层
+    for (int i = 0; i < 5; ++i) { 
         if (fs::exists(p / "bankdata") && fs::is_directory(p / "bankdata")) {
-            return (p / "bankdata" / filename).string();
+            return p / "bankdata" / filenamePath; // 直接返回 path 对象
         }
         if (p.has_parent_path()) {
             p = p.parent_path();
@@ -330,8 +335,22 @@ string getResourcePath(const string& filename) {
         }
     }
 
-    // 如果找不到 bankdata 目录，默认拼接在当前目录下的 bankdata
-    return (currentPath / "bankdata" / filename).string();
+    return currentPath / "bankdata" / filenamePath;
+}
+
+// 修改 isValidPath 接受 fs::path (或者保留 string 版本但要注意转换)
+bool isValidPath(const fs::path &p)
+{
+    // fs::path 转 string 用于检查非法字符时，可能会受编码影响
+    // 但 fs::path 自带的检查通常更可靠
+    try {
+        // 简单的存在性或文件名检查
+        if (!p.has_filename()) return false;
+        if (p.has_parent_path() && !fs::exists(p.parent_path())) return false;
+        return true;
+    } catch (...) {
+        return false;
+    }
 }
 
 bool loadFromFile(BankListNode *head, const string &filename)
@@ -343,12 +362,15 @@ bool loadFromFile(BankListNode *head, const string &filename)
     SetConsoleCP(65001);
     #endif
 
-    string standardPath = getResourcePath(filename);
+    // 获取 fs::path 对象
+    fs::path standardPath = getResourcePath(filename);
 
+    // 直接传递 path 对象给 isValidPath
     if(!isValidPath(standardPath))
         return false;
 
-    ifstream infile(standardPath);
+    // 关键：ifstream 直接接受 fs::path，Windows下会自动使用宽字符 API，无视系统编码设置
+    ifstream infile(standardPath); 
     if (!infile.is_open())
         return false;
 
@@ -377,11 +399,13 @@ bool loadFromFile(BankListNode *head, const string &filename)
 
 bool saveToFile(BankListNode *head, const string &filename)
 {
-    string fullPath = getResourcePath(filename);
+    // 获取 fs::path 对象
+    fs::path fullPath = getResourcePath(filename);
 
     if(!isValidPath(fullPath))
         return false;
 
+    // 关键：ofstream 直接接受 fs::path
     ofstream outfile(fullPath);
     if (!outfile.is_open())
         return false;
